@@ -1,0 +1,93 @@
+[daoクラス・mapperクラスの整理]
+検索処理の時：返り値=entry[]
+
+詳細表示の時：返り値=context
+
+context:{
+    prev,next,definitions[]
+}
+※selfは要らない気がする。react側でselectedにword,wordId,phonetic,phoneticIdを渡してしまえばいいだけ。のはず。
+①prev,next,idsを取得する。mapper=>map
+②idsの各要素からelemを取得,返り値のdtoをserviceでインスタンスに代入。
+③
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+entry//getEntriesByQuery(SearchConditionを使用)
+query:「テーブル名 =>　valueなmap」又は 「{tableName:string,query:string}」なパラメータ？
+rs一行ごとにword,phonetic
+
+context//getContextByQuery(SearchConditionを使用)
+query:「wordId,phoneticId」
+rs全体からprev,next,ids
+
+element//getElementsByDefinitionIds
+rs一行ごとにelement作成、definiton_id,elementのkey-value型map
+
+[dao]
+wordDao:CR
+phoneticDao:CR
+tagDao:C
+meaningDao:CRUD
+exampleDao:CRUD
+referenceDao:CRUD
+
+definitionTagDao:CRUD
+definitionDao:CRUD
+
+・Rのみ
+entryDao
+contextDao
+
+以下のような要素を扱うAPIアプリケーションのdaoクラスは、どのように設計すればいいのでしょうか？
+想定されるCRUD操作は、「項目名(解説)[CRUD]」の形式で書いてます。
+
+テーブルがあるもの
+word[CR]
+phonetic[CR]
+tag[CR]
+definition(中間テーブル|word,phonetic,userのidを外部キーとして持ち、meaning/example/reference/definition_tagはdefinitionのidを外部キーとする)[C?UD]
+meaning[CRUD]
+example[CRUD]
+reference[CRUD]
+definition_tag(中間テーブル|definitionのidとtagのidを関連付ける)[CRUD]
+collection(中間テーブル|defintion,userのidを外部キーとして持ち、本人以外の投稿も含めユーザー毎のdefinitionのコレクションを表す。)[C?_D]
+※Rが"?"になっているものは、テーブル単体へのRead問い合わせを行う場面は現状想定していないことを意味します。以下のentry,contextの取得の際は関係してくるテーブルなので"?"としています。
+
+テーブルがないもの
+entry(word,phoneticの情報から成る項目単位。dtoとしてはdefinitionのリストを格納できるプロパティも持つ。definitionテーブルにcollection,word,phoneticをJOINするsqlから取得する)
+context(五十音順で前後のentryを示すprev,nextと、関連するdefinitionのリストを持つ。definitionテーブルにcollection,word,phoneticをJOINするsqlを利用した複雑なクエリで取得する)
+
+
+
+
+
+
+WITH sorted_keys AS (
+    SELECT 
+        w.id AS word_id,
+        w.word AS word,
+        p.id AS phonetic_id,
+        p.phonetic AS phonetic,
+        d1.id AS definition_id,
+        d1.user_id AS user_id,
+        ROW_NUMBER() OVER (ORDER BY p.phonetic,w.word) AS row_num 
+    FROM (
+        SELECT 
+            d.id,d.user_id,d.word_id,d.phonetic_id 
+        FROM 
+            definitions d 
+            JOIN (...subquery) AS subquery
+            ON d.id = subquery.definition_id
+            JOIN words w
+            ON w.id = d.word_id
+            JOIN phonetic p
+            ON p.id = d.phonetic_id
+    )) 
+    SELECT k_prev.word_id AS prev_word_id,k_prev.word AS prev_word,k_prev.phonetic_id AS prev_phonetic_id,k_prev.phonetic AS prev_phonetic,k_next.word_id AS next_word_id,k_next.word AS next_word,k_next.phonetic_id AS next_phonetic_id,k_next.phonetic AS next_phonetic ,k.definition_id AS definition_id,k.user_id AS user_id 
+    FROM sorted_keys k 
+    LEFT JOIN sorted_keys k_prev ON k_prev.row_num = k.row_num - 1 
+    LEFT JOIN sorted_keys k_next ON k_next.row_num = k.row_num + 1 
+    WHERE k.word_id = ? AND k.phonetic_id = ?;
+
+
+

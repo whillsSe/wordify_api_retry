@@ -1,0 +1,10 @@
+[設計概要]
+src/main/java/com/wordify/api
+
+プレゼンテーション層
+    ./servlet
+    ./controller
+ビジネスロジック層(ドメイン層)
+    ./service
+データアクセス層
+    ./dao

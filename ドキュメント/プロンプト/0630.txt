@@ -1,0 +1,26 @@
+Javaを使用して、バックエンドAPIアプリケーションの作成を行います。
+学習目的のため、Spring等に代表される、独自の記法が生じるような大規模フレームワークは、内部の処理が不透明となる事から採用を避けたいと考えています。
+大まかにいえば、Servletが受け取ったパラメーターに応じてJSONをレスポンスとして送信します。
+ここで、取り扱うデータ構造が以下の要素からなるとき、Factoryパターンを有効に使えるかどうかをご教授願いたいです。
+
+[パターン１]
+id:int,value:stringを持つ要素：word,phonetic,tag
+
+[パターン２]
+id:int,value:stringに加え、definition_id:intを持つ要素：meaning,example,reference
+
+…としてたけど、dtoそのものにdefinition_idを入れる必要は無いね。
+
+[構造]
+entry{word:Word,phonetic:Phonetic,definitions:Defition[]}
+definition{
+    id:int,meaning:Meaning,example:Example,reference:Reference,tags:Tag[]
+}
+context{
+    prev:Entry,next:Entry,self:Entry
+}
+
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+daoはDBとのデータのやり取りを担うクラスで、それ以外の責任を負うべきではない、とされますよね？
+厳密にそのルールに則ると、daoクラスからはresultSetしか返せないように思えます。
+複数の要素を組み合わせたDto(仮称)を作成・管理・加工する責務はServiceにあるとするなら、resultSetをServiceで加工する事になるのですか？
