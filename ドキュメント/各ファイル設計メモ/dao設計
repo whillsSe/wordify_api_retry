@@ -1,0 +1,32 @@
+daoは、connectionを奇数に取る
+serviceは、コンストラクタでdao,dataSourceを受け取り、ローカル変数とする。
+serviceは、dataSourceからconnectionを取得する
+serviceは、必要であればautoCommit:falseを明示的に設定する。
+
+daoメソッドは、connectionを引数として受け取る
+daoメソッド(Read系)は、適当なDtoへのMapperを内蔵する。
+
+tagおよびdefinitions_tagsの扱い
+tag
+    ⇒
+    登録:word,phonetic同様「引数の文字列をDBに問い合わせ、あればidを取得無ければinsertしidを取得」の処理
+    取得:definitionIdから引く場合はdefinitionTagDaoでJOINする方が効率がいい
+        tagのvalue(文字列)からdefinitionIdを引く場合は、tagDaoでIdを取得してからdefinitionTagDaoに渡した方がclean
+
+アプローチAでの実装の問題点
+＝Entry取得の段階で、definitionIdの列挙も取得してしまう。definitionIdの列挙をパラメータとして送る事になり、「見出し」と「詳細」の切り離しがうまく行えないのではないか？
+
+range情報+paramを送信
+    paramから適当なdao呼び出し⇒word,phonetic,tagのid(s)情報を取得？
+    rangeクエリ+要素idを引数に、、、問題点発見。要素idの数が不定なので、クエリの構築に不安がある。
+    ⇒(sql,params)のような型を用意し、実際は一度のクエリで処理・実行されるようにするのはどうか？
+        検索範囲は既にそんな設計にしてる。
+        パラメータ要素もそうしてみても良いのでは？
+        ⇔検索範囲とパラメータで異なるのは、そのデータ数。パラメータは引数として渡しうる範囲にも思えるが如何に。
+        WHERE (省略t名).(要素名) = (渡すパラメータ)//word,phoneticの場合。
+        WHERE d.id IN (SELECT dt.definitionId FROM definitionsTags dt JOIN tags t ON dt.id = t.id AND…)//ここはserviceで分岐するのも有効？ 
+
+⇒word,phoneticを取得
+
+range情報+wordId,phoneticIdを送信
+⇒prev,next,definitionsを取得

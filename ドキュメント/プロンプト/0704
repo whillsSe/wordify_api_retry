@@ -1,0 +1,43 @@
+了解しました。その場合、以下のようにDAOを設計すると良いでしょう。
+
+1. **TagDao**：`Tag` テーブルに対する CRUD 操作を行います。主に以下のようなメソッドを持つでしょう。
+    - `createTag(String value)`: 新規のTagを作成します。
+    - `getTagId(String value)`: 指定した文字列に対応するTagのIDを取得します。存在しない場合は適切な例外を返します。
+
+2. **DefinitionTagDao**：`definitions_tags` テーブルに対する操作を行います。このDAOは特に `Tag` と `Definition` の関連付けに関する操作に集中します。
+    - `getDefinitionIdsByTagId(int tagId)`: 与えられた `tagId` から関連する `Definition` のIDを取得します。
+    - `getTagIdsByDefinitionId(int definitionId)`: 与えられた `definitionId` から関連する `Tag` のIDを取得します。
+    - `addTagToDefinition(int definitionId, int tagId)`: 与えられた `Definition` に `Tag` を関連付けます。
+    - `removeTagFromDefinition(int definitionId, int tagId)`: 与えられた `Definition` から `Tag` の関連付けを削除します。
+
+`TagDao`の`getTagId(String value)`メソッドを使えば、検索処理だけを行うことができます。その後、取得したIDを使って`DefinitionTagDao`の`getDefinitionIdsByTagId(int tagId)`メソッドを呼び出すことで、指定したTagに関連するDefinitionのIDを取得することができます。
+
+
+検索処理では、以下のような実装を行います。
+ユーザーが設定する要素
+range:投稿者や意味リストを指定し検索対象範囲とするパラメータ。サブクエリとして埋め込まれる。
+param:phoneticもしくはwordの文字列を指定する。tagの文字列を指定する際もここに入れる可能性アリ。
+
+検索処理として、以下の二つの操作を想定しています。
+操作①:range内でparamの条件を満たすdefinition要素を絞り込み、その見出しを列挙する。
+操作②:①で取得した列挙のうち一つについて、range内で紐つく各definitionとdefinitionIdに紐つく構成要素を取得し表示すると同時に、range内において50音順で一つ前/後にあたる見出しを取得する。
+
+この二つを実現する際、二つのアプローチが考えられます。
+アプローチA:操作①にて見出し一つにつきword,phoneticの各id,valueに加え、definitionIdの列挙も取得する。⇒操作②ではrangeとdefinitionIdの列挙を送信し、definitionIdから各Dao経由でdefinitionを取得する＆range及びdefinitionIdを使用し前後番号取得daoから前後情報を取得する
+アプローチB:操作①にて見出し一つにつきword,phoneticの各id,valueを取得⇒操作②ではrange,wordId,phoneticIdを送信し、最初に前後の単語情報とdefinitionIdsを一度に取得するdaoメソッドを呼び出し、その結果のdetinitionIdsを使用しdefinition構成要素を取得する。
+
+どちらがいいでしょうか？
+
+パスパラメータとクエリパラメータの設計について質問です。以下のような操作①及び操作②について、どの要素をどのパラメータに割り振るべきでしょうか。
+range:両方の操作で共通する、検索対象とする範囲を示すパラメータ群。実際にはtypeとid、二つのパラメータから成る。
+    自分の投稿を対象とする場合：type:"self"
+    フォロワーの投稿：type:"following"
+    特定のユーザーの投稿：type:"specific" id:"(ユーザーid)"
+    特定の辞書に登録された投稿：type:"dictionary" id:"(辞書id)"
+操作①：上記rangeと、word,phonetic,tagといった情報から、range内で情報の条件を満たすentryの列挙を取得する
+操作②：操作①で取得した列挙のうち一つについて、range及びwordId,phoneticIdから「range内でword,phoneticが指定したidであるdefinition」及び「左記項目のrange内で50音順で一つ前/ひとつ後にあたるentryの見出し」の情報を取得する。
+
+結論：
+/entries/{type}/{id}?word={word}&phonetic={phonetic}&tag={tag}
+/entries/{type}/{id}/definition/{wordId}/{phoneticId}
+を軸に検証、

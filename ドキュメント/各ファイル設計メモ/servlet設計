@@ -1,0 +1,17 @@
+ユースケースをまず列挙してみる
+range,query(仮称)からEntryを列挙search/entry?range=xxx&word=yyy&tag=aa,bb,cc
+range,wordId,phoneticIdからcontextを取得context?range=xxx&wordId=xxx&phoneticId=xxx
+definitionの新規登録
+definitionの修正(更新)
+collectionの新規登録
+collectionの解除
+user情報の表示
+user情報の変更
+login?
+logout?
+
+以下後回し要素
+dictionaryの新規作成
+dictionaryの編集メンバー追加
+dictionaryのdefinition追加
+dictionaryのdefinition解除
