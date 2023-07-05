@@ -4,11 +4,11 @@ public class BaseEntityDto {
     //Word,Phonetic,Tagといった、Create,Readのみ行うマスタ系DBにしてる要素。
     //情報だけ取得できればよく、更新日等の情報は不要であるため。
     String id;
-    String Value;
+    String value;
     
     public BaseEntityDto(String id, String value) {
         this.id = id;
-        Value = value;
+        this.value = value;
     }
     public String getId() {
         return id;
@@ -17,10 +17,10 @@ public class BaseEntityDto {
         this.id = id;
     }
     public String getValue() {
-        return Value;
+        return value;
     }
     public void setValue(String value) {
-        Value = value;
+        this.value = value;
     }
     
 }

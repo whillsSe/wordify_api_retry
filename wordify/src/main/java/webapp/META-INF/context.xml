@@ -10,6 +10,7 @@
                 driverClassName="com.mysql.jdbc.Driver"
                 url="jdbc:mysql://localhost:3306/dict"
                 maxWait="5000"
+                maxAcrive="10"
                 maxIdle="2"
                 validationQuery="SELECT * FROM ACCESS_COUNTER" />
 </Context>
