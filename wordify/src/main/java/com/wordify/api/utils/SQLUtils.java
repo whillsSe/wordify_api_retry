@@ -7,4 +7,7 @@ public class SQLUtils {
         }
         builder.deleteCharAt(builder.length() - 1);
     }
+    public static void appendPercentSymbol(StringBuilder builder){
+        builder.append("%");
+    }
 }

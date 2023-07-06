@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter implements Filter {
                 // JWTの検証
                 Jws<Claims> jwsClaims = jwtParser.parseClaimsJws(jwtToken);
                 // JWTトークンの検証が成功したら、クレームからユーザー情報を取り出し、リクエストの属性に設定します。
-                httpRequest.setAttribute("user", jwsClaims.getBody().getSubject());
+                httpRequest.setAttribute("user", Integer.parseInt(jwsClaims.getBody().getSubject()));
                 chain.doFilter(request, response);
             } catch (JwtException e) {
                 // トークンの検証が失敗したら、エラーレスポンスを送ります。
