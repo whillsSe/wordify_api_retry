@@ -40,19 +40,25 @@ public class EntryQuery implements IScopeQuery{
         return wordString;
     }
     public void setWordString(String wordString) {
-        this.wordString = wordString;
+        if(wordString != null){
+            this.wordString = wordString;
+        }
     }
     public String getPhoneticString() {
         return phoneticString;
     }
     public void setPhoneticString(String phoneticString) {
+        if(phoneticString != null){
         this.phoneticString = phoneticString;
+        }
     }
     public List<String> getTagsStrings() {
         return tagsStrings;
     }
     public void setTagsStrings(List<String> tagsStrings) {
+    if(tagsStrings != null){
         this.tagsStrings = tagsStrings;
+    }
     }
     
 }

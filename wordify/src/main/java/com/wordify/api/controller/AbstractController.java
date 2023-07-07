@@ -5,8 +5,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import com.wordify.api.config.ConnectionPool;
-
 import jakarta.servlet.http.HttpServletResponse;
 
 public abstract class AbstractController {

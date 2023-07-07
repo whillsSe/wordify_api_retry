@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.controller.SearchEntriesController;
-import com.wordify.api.service.EntryService;
+import com.wordify.api.service.entryService.EntryService;
+import com.wordify.api.service.entryService.EntryServiceImpl;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +22,7 @@ public class searchEntriesServlet extends HttpServlet{
     public void init() {
         try {
             ExecutorService executor = (ExecutorService) getServletContext().getAttribute("executor");
-            EntryService service = new EntryService(ConnectionPool.getInstance());
+            EntryService service = new EntryServiceImpl(ConnectionPool.getInstance());
             controller = new SearchEntriesController(executor,service);
         } catch (NamingException e) {
             e.printStackTrace();

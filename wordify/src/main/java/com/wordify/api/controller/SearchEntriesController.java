@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
 import com.wordify.api.dto.EntryDto;
 import com.wordify.api.dto.params.EntryQuery;
-import com.wordify.api.service.EntryService;
+import com.wordify.api.service.entryService.EntryService;
 import com.wordify.api.utils.ObjectMapperSingleton;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,15 +26,13 @@ public class SearchEntriesController extends AbstractController{
     public void handleGetRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
         Callable<String> task = () -> {
             List<EntryDto> list = new ArrayList<EntryDto>();
-            EntryQuery query = new EntryQuery((int)req.getAttribute("user"));
-                //ここでreqから各パラメータの取得
-            String[] pathParts = ControllerUtils.getPathParts(req);
-            query.setScope(pathParts[0]);
-            if(pathParts[1] != "_") query.setScopeId(Integer.parseInt(pathParts[1]));
+            EntryQuery query = ControllerUtils.getEntryQuery(req);
             query.setWordString(req.getParameter("word"));
             query.setPhoneticString(req.getParameter("phonetic"));
-            query.setTagsStrings(Arrays.asList(req.getParameter("tag").split(",")));
-
+            String tags = req.getParameter("tag");
+            if(tags != null){
+                query.setTagsStrings(Arrays.asList(tags.split(",")));   
+            }
             list = service.getEntries(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();
             String json = mapper.writeValueAsString(list);
