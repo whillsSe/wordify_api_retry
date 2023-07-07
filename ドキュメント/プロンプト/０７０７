@@ -1,0 +1,8 @@
+以下のようなmapperを実装したいと考えています。
+・resultSetを引数に取り、Map<Integer,<T>>を返すmapToMapを実装
+・mapToMapは、while(resultSet.next())でループ処理をする。
+・whileでは、以下のような処理が繰り返される。
+  T dto = mapToDto(resultSet);
+  map.push(dto.getDefinitionId(),dto);
+
+mapperクラスがdaoパッケージの中で各アクセス先ごとのサブパッケージに用意されている時、こう言った処理を共通化して実装するいい方法はないでしょうか？
