@@ -15,12 +15,10 @@ public class GenericMapper<T> {
 
     public Map<Integer, T> mapToMap(ResultSet resultSet) throws SQLException {
         Map<Integer, T> map = new HashMap<>();
-
         while (resultSet.next()) {
             SimpleEntry<Integer, T> entry = dtoAndKeyMapper.mapToDtoWithKey(resultSet);
             map.put(entry.getKey(), entry.getValue());
         }
-
         return map;
     }
 }
