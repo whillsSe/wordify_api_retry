@@ -19,14 +19,11 @@ public class EntryServiceImpl implements EntryService{
         this.entryDao = new EntryDaoImpl();//仮設。本来は上から注入。
     }
     @Override
-    public List<EntryDto> getEntries(EntryQuery query){
+    public List<EntryDto> getEntries(EntryQuery query) throws SQLException{
         List<EntryDto> list = new ArrayList<EntryDto>();
         try (Connection conn = connectionPool.getConnection()) {
             //conn.setAutoCommit(false);//今回は不要
             list = entryDao.getEntry(query, conn);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return list;
     }

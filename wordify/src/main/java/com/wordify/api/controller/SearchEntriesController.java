@@ -31,7 +31,7 @@ public class SearchEntriesController extends AbstractController{
             query.setPhoneticString(req.getParameter("phonetic"));
             String tags = req.getParameter("tag");
             if(tags != null){
-                query.setTagsStrings(Arrays.asList(tags.split(",")));   
+                query.setTagsStrings(Arrays.asList(tags.split(",")));
             }
             list = service.getEntries(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();

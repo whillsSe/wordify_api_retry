@@ -2,9 +2,12 @@ package com.wordify.api.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.wordify.api.dto.params.ICustomParam;
+import com.wordify.api.dto.params.IntParam;
+import com.wordify.api.dto.params.StringParam;
 
 public class DaoUtils {
     public static void setParameters(PreparedStatement pstmt, List<ICustomParam> params,int count) throws SQLException {
@@ -17,5 +20,19 @@ public class DaoUtils {
         }
         // 他のデータ型に対する判定とセット処理を追加することもできます
     }
-}
+    }
+    public static List<ICustomParam> parseIntegerToICustomParams(List<Integer> list){
+        List<ICustomParam> params = new ArrayList<>(null);
+        for(Integer param:list){
+            params.add(new IntParam(param));
+        }
+        return params;
+    }
+    public static List<ICustomParam> parseStringToICustomParams(List<String> list){
+        List<ICustomParam> params = new ArrayList<>(null);
+        for(String param:list){
+            params.add(new StringParam(param));
+        }
+        return params;
+    }
 }

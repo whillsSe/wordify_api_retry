@@ -2,8 +2,10 @@ package com.wordify.api.service.contextService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
 import com.wordify.api.dao.collection.CollectionDaoImpl;
@@ -19,6 +21,10 @@ import com.wordify.api.dao.meaning.MeaningDaoImpl;
 import com.wordify.api.dao.tag.TagDao;
 import com.wordify.api.dao.tag.TagDaoImpl;
 import com.wordify.api.dto.ContextDto;
+import com.wordify.api.dto.DefinitionDto;
+import com.wordify.api.dto.ExampleDto;
+import com.wordify.api.dto.MeaningDto;
+import com.wordify.api.dto.TagDto;
 import com.wordify.api.dto.params.ContextQuery;
 
 public class ContextServiceImpl implements ContextService{
@@ -39,15 +45,27 @@ public class ContextServiceImpl implements ContextService{
     this.collectionDao = new CollectionDaoImpl();
     this.definitionDao = new DefinitionDaoImpl();
   }
-  public ContextDto getContext(ContextQuery query){
-    try {
-      Connection conn = connectionPool.getConnection();
-      ContextDto contectDto = contextDao.getContext(query, conn);
+  public ContextDto getContext(ContextQuery query) throws SQLException{
+    try (Connection conn = connectionPool.getConnection()){
+      ContextDto contextDto = contextDao.getContext(query, conn);
+      Map<Integer,DefinitionDto> definitionsMap = contextDto.getDefinitionsMap();
+      List<Integer> definitionIds = new ArrayList<>(definitionsMap.keySet());
+      Map<Integer,MeaningDto> meaningsResult = meaningDao.getMapByDefinitionIds(definitionIds,conn);
+      Map<Integer,List<ExampleDto>> examplesResult = exampleDao.getMapWithListByDefinitionIds(definitionIds,conn);
+      Map<Integer,List<TagDto>> tagsResult = tagDao.getMapWithListByDefinitionIds(definitionIds, conn);
       
-    } catch (SQLException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-      throw new Error("");
+      for(Integer definitionId: definitionIds){
+        DefinitionDto definition = definitionsMap.get(definitionId);
+      
+        MeaningDto meaning = meaningsResult.get(definitionId);
+        List<ExampleDto> examples = examplesResult.get(definitionId);
+        List<TagDto> tags = tagsResult.get(definitionId);
+
+        definition.setMeaning(meaning);
+        definition.setExamples(examples);
+        definition.setTags(tags);
+      }
+      return contextDto;
     }
   }
 }
