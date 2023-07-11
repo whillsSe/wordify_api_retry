@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/entries/*")
-public class searchEntriesServlet extends HttpServlet{
+public class EntriesServlet extends HttpServlet{
     private SearchEntriesController controller;
     @Override
     public void init() {
