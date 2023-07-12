@@ -8,6 +8,7 @@ import java.util.List;
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.entry.EntryDao;
 import com.wordify.api.dao.entry.EntryDaoImpl;
+import com.wordify.api.dto.DefinitionDto;
 import com.wordify.api.dto.EntryDto;
 import com.wordify.api.dto.params.EntryQuery;
 
@@ -26,5 +27,9 @@ public class EntryServiceImpl implements EntryService{
             list = entryDao.getEntry(query, conn);
         }
         return list;
+    }
+    @Override
+    public DefinitionDto registerDefinition(DefinitionDto dto){
+        
     }
 }

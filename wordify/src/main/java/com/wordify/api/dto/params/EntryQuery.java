@@ -6,7 +6,7 @@ import java.util.List;
 public class EntryQuery implements IScopeQuery{
     private int userId;
     private String scope;
-    private int scopeId;
+    private int scopeId = 0;
     private String wordString = "";
     private String phoneticString = "";
     private List<String> tagsStrings = new ArrayList<>();

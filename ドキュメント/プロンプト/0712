@@ -1,0 +1,4 @@
+/entries/*
+/entries/*/context/
+それぞれを待ち受ける二つのServletが存在します。いずれもGetの処理を受け付けるためのServletファイルです。
+/entries/へのPOSTリクエストが存在する

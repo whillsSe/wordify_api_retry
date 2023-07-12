@@ -1,5 +1,6 @@
 package com.wordify.api.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
+import com.wordify.api.dto.DefinitionDto;
 import com.wordify.api.dto.EntryDto;
 import com.wordify.api.dto.params.EntryQuery;
 import com.wordify.api.service.entryService.EntryService;
@@ -17,9 +19,9 @@ import com.wordify.api.utils.ObjectMapperSingleton;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class SearchEntriesController extends AbstractController{
+public class EntriesController extends AbstractController{
     private EntryService service;
-    public SearchEntriesController(ExecutorService executor,EntryService service){
+    public EntriesController(ExecutorService executor,EntryService service){
         super(executor);
         this.service = service;
     }
@@ -39,5 +41,17 @@ public class SearchEntriesController extends AbstractController{
             return json;
         };
         super.handleAsyncRequest(task, resp);
+    }
+    public void handlePostRequest(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        Callable<String> rask = () -> {
+            String requestBody = ControllerUtils.readRequestBody(req);
+            ObjectMapper mapper = ObjectMapperSingleton.getInstance();
+            DefinitionDto requestedValue = mapper.readValue(requestBody,DefinitionDto.class);
+            requestedValue.setAuthorId((Integer)req.getAttribute("user"));
+            DefinitionDto dto = service.registerDefinition(requestedValue);
+            String json = mapper.writeValueAsString(dto);
+            return json;
+        };
+        handleAsyncRequest(rask, res);
     }
 }

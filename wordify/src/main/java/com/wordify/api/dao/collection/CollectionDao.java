@@ -7,6 +7,6 @@ import com.wordify.api.dto.params.CollectionQuery;
 
 public interface CollectionDao {
 
-    void addDefinition(CollectionQuery query, Connection conn)throws SQLException;
-    
+    public void addDefinition(CollectionQuery query, Connection conn)throws SQLException;
+    public void removeDefinition(CollectionQuery query,Connection conn) throws SQLException;
 }

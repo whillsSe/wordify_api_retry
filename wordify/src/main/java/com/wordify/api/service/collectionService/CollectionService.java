@@ -6,4 +6,5 @@ import com.wordify.api.dto.params.CollectionQuery;
 
 public interface CollectionService {
     public void addCollection(CollectionQuery query)throws SQLException;
+    public void removeCollection(CollectionQuery query)throws SQLException;
 }

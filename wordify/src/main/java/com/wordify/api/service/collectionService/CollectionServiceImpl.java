@@ -19,4 +19,8 @@ public class CollectionServiceImpl implements CollectionService{
         Connection conn = connectionPool.getConnection();
         collectionDao.addDefinition(query,conn);//エラーはcontrollerまで直通
     }
+    public void removeCollection(CollectionQuery query)throws SQLException{
+        Connection conn = connectionPool.getConnection();
+        collectionDao.removeDefinition(query,conn);
+    }
 }

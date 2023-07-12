@@ -18,5 +18,13 @@ public class CollectionDaoImpl implements CollectionDao{
         }
         
     }
+    public void removeDefinition(CollectionQuery query,Connection conn) throws SQLException{
+        StringBuilder builder = new StringBuilder("DELETE FROM collection WHERE definition_id = ? AND user_id = ?");
+        try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
+            pstmt.setInt(0,query.getDefinitionId());
+            pstmt.setInt(1, query.getUserId());
+            pstmt.executeQuery();
+        }
+    }
     
 }

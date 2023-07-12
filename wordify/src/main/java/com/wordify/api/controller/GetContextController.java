@@ -22,10 +22,7 @@ public class GetContextController extends AbstractController{
     }
     public void handleGetRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
         Callable<String> task = () -> {
-            
             ContextQuery query = ControllerUtils.getContextQuery(req);
-            query.setPhoneticId((Integer)req.getAttribute("pId"));
-            query.setWordId((Integer)req.getAttribute("wId"));
 
             ContextDto dto = service.getContext(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();

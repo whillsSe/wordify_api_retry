@@ -1,5 +1,8 @@
 package com.wordify.api.controller.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 import com.wordify.api.dto.params.ContextQuery;
 import com.wordify.api.dto.params.EntryQuery;
 import com.wordify.api.dto.params.IScopeQuery;
@@ -30,6 +33,29 @@ public class ControllerUtils {
         String[] pathParts = getPathParts(req);
         ContextQuery query = new ContextQuery(userId);
         getScopeInfo(pathParts, query);
+        getContextInfo(pathParts, query);
         return query;
+    }
+    private static void getContextInfo(String[] pathParts,ContextQuery query){
+        int marker = 0;
+        if(pathParts[1] == "context"){
+            marker = 2;
+        }else if(pathParts[2] == "context"){
+            marker = 3;
+        }
+        query.setPhoneticId(Integer.parseInt(pathParts[marker]));
+        query.setWordId(Integer.parseInt(pathParts[marker+1]));
+    }
+
+    public static String readRequestBody(HttpServletRequest req) throws IOException{
+        StringBuilder builder = new StringBuilder();
+         try(BufferedReader reader = req.getReader()){
+                String line;
+                while((line = reader.readLine())!= null){
+                    builder.append(line);
+                }
+                
+            }
+        return builder.toString();
     }
 }
