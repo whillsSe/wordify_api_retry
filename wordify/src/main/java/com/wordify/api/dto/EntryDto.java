@@ -1,6 +1,6 @@
 package com.wordify.api.dto;
 
-public class EntryDto {
+public class EntryDto {//見出しの列挙を取得する時のDto
     BaseEntityDto word;
     BaseEntityDto phonetic;
     

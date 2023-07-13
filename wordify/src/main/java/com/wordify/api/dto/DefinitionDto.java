@@ -2,7 +2,7 @@ package com.wordify.api.dto;
 
 import java.util.List;
 
-public class DefinitionDto {
+public class DefinitionDto {//Contextの一部項目としてのDefinitionのDto。
     private int id;
     private int authorId;
     private MeaningDto meaning;

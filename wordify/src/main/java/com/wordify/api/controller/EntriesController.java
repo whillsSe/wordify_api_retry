@@ -1,6 +1,5 @@
 package com.wordify.api.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +9,10 @@ import java.util.concurrent.ExecutorService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
-import com.wordify.api.dto.DefinitionDto;
+import com.wordify.api.controller.viewmodel.ContextDtoViewModel;
+import com.wordify.api.dto.ContextDto;
 import com.wordify.api.dto.EntryDto;
+import com.wordify.api.dto.params.ContextQuery;
 import com.wordify.api.dto.params.EntryQuery;
 import com.wordify.api.service.entryService.EntryService;
 import com.wordify.api.utils.ObjectMapperSingleton;
@@ -25,7 +26,7 @@ public class EntriesController extends AbstractController{
         super(executor);
         this.service = service;
     }
-    public void handleGetRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
+    public void handleGetEntriesRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
         Callable<String> task = () -> {
             List<EntryDto> list = new ArrayList<EntryDto>();
             EntryQuery query = ControllerUtils.getEntryQuery(req);
@@ -42,16 +43,23 @@ public class EntriesController extends AbstractController{
         };
         super.handleAsyncRequest(task, resp);
     }
-    public void handlePostRequest(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        Callable<String> rask = () -> {
-            String requestBody = ControllerUtils.readRequestBody(req);
+
+    public void handleGetContextRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
+        Callable<String> task = () -> {
+            ContextQuery query = ControllerUtils.getContextQuery(req);
+
+            ContextDto dto = service.getContext(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();
-            DefinitionDto requestedValue = mapper.readValue(requestBody,DefinitionDto.class);
-            requestedValue.setAuthorId((Integer)req.getAttribute("user"));
-            DefinitionDto dto = service.registerDefinition(requestedValue);
-            String json = mapper.writeValueAsString(dto);
+            String json = mapper.writeValueAsString(convertContextDtoToViewModel(dto));
             return json;
         };
-        handleAsyncRequest(rask, res);
+        super.handleAsyncRequest(task, resp);
+    }
+    private ContextDtoViewModel convertContextDtoToViewModel(ContextDto dto){
+        ContextDtoViewModel viewModel = new ContextDtoViewModel();
+        viewModel.setPrevEntry(dto.getPrevEntry());
+        viewModel.setNextEntry(dto.getNextEntry());
+        viewModel.setDefinitions(new ArrayList<>(dto.getDefinitionsMap().values()));
+        return viewModel;
     }
 }

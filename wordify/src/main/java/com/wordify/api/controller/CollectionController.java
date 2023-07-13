@@ -1,7 +1,6 @@
 package com.wordify.api.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 

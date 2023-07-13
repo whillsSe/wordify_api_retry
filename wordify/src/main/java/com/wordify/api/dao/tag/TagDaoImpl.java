@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
+import com.wordify.api.dto.BaseEntityDto;
 import com.wordify.api.dto.TagDto;
 import com.wordify.api.dto.params.ICustomParam;
 import com.wordify.api.utils.SQLUtils;
@@ -32,5 +35,33 @@ public class TagDaoImpl implements TagDao{
         }catch(SQLException e){
           throw new Error("SQLException has happened!");
         }
-      } 
+      }
+    @Override
+    public List<BaseEntityDto> retrieveOrCreate(List<BaseEntityDto> dtos, Connection conn) throws SQLException{
+        List<BaseEntityDto> processedDtos = new ArrayList<>();
+        StringBuilder builder = DaoUtils.createStringBuilder("tag");
+        
+        try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(), Statement.RETURN_GENERATED_KEYS)){
+            for (BaseEntityDto dto : dtos) {
+                pstmt.setString(1, dto.getValue());
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating tag failed, no rows affected.");
+                }
+        
+                try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
+                    if(generatedKeys.next()){
+                        int id = generatedKeys.getInt(1);
+                        dto.setId(id);
+                        processedDtos.add(dto);
+                    } else {
+                        throw new SQLException("Creating tag failed, no ID obtained.");
+                    }
+                }
+                pstmt.clearParameters();
+            }
+        }
+        return processedDtos;
+    }
+
     }

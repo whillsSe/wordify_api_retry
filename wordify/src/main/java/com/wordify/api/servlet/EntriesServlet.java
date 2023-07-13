@@ -3,10 +3,14 @@ package com.wordify.api.servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
+import javax.imageio.IIOException;
 import javax.naming.NamingException;
 
 import com.wordify.api.config.ConnectionPool;
+import com.wordify.api.controller.DefinitionController;
 import com.wordify.api.controller.EntriesController;
+import com.wordify.api.service.definitionService.DefinitionService;
+import com.wordify.api.service.definitionService.DefinitionServiceImpl;
 import com.wordify.api.service.entryService.EntryService;
 import com.wordify.api.service.entryService.EntryServiceImpl;
 
@@ -17,13 +21,16 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/entries/*")
 public class EntriesServlet extends HttpServlet{
-    private EntriesController controller;
+    private EntriesController entriesController;
+    private DefinitionController definitionController;
     @Override
     public void init() {
         try {
             ExecutorService executor = (ExecutorService) getServletContext().getAttribute("executor");
-            EntryService service = new EntryServiceImpl(ConnectionPool.getInstance());
-            controller = new EntriesController(executor,service);
+            EntryService entryService = new EntryServiceImpl(ConnectionPool.getInstance());
+            entriesController = new EntriesController(executor,entryService);
+            DefinitionService definitionService = new DefinitionServiceImpl(ConnectionPool.getInstance());
+            definitionController = new DefinitionController(executor,definitionService);
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -31,11 +38,11 @@ public class EntriesServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        controller.handleGetRequest(req, resp);
+        entriesController.handleGetEntriesRequest(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req,HttpServletResponse res){
-        controller.handlePostRequest(req, res);
+    protected void doPost(HttpServletRequest req,HttpServletResponse res)throws IOException{
+        definitionController.handlePostRequest(req, res);
     }
 }
