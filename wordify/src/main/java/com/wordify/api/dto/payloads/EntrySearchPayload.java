@@ -1,16 +1,16 @@
-package com.wordify.api.dto.params;
+package com.wordify.api.dto.payloads;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntryQuery implements IScopeQuery{
+public class EntrySearchPayload implements ISearchScopePayload{
     private int userId;
     private String scope;
     private int scopeId = 0;
     private String wordString = "";
     private String phoneticString = "";
     private List<String> tagsStrings = new ArrayList<>();
-    public EntryQuery(int userId){
+    public EntrySearchPayload(int userId){
         this.userId = userId;
     }
     @Override

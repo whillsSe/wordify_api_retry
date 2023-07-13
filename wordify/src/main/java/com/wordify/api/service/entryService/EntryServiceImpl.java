@@ -28,8 +28,8 @@ import com.wordify.api.dto.EntryDto;
 import com.wordify.api.dto.ExampleDto;
 import com.wordify.api.dto.MeaningDto;
 import com.wordify.api.dto.TagDto;
-import com.wordify.api.dto.params.ContextQuery;
-import com.wordify.api.dto.params.EntryQuery;
+import com.wordify.api.dto.payloads.ContextRetrievalPayload;
+import com.wordify.api.dto.payloads.EntrySearchPayload;
 
 public class EntryServiceImpl implements EntryService{
     private ConnectionPool connectionPool;
@@ -48,7 +48,7 @@ public class EntryServiceImpl implements EntryService{
         this.exampleDao = new ExampleDaoImpl();
     }
     @Override
-    public List<EntryDto> getEntries(EntryQuery query) throws SQLException{
+    public List<EntryDto> getEntries(EntrySearchPayload query) throws SQLException{
         List<EntryDto> list = new ArrayList<EntryDto>();
         try (Connection conn = connectionPool.getConnection()) {
             //conn.setAutoCommit(false);//今回は不要
@@ -58,7 +58,7 @@ public class EntryServiceImpl implements EntryService{
     }
 
     @Override
-    public ContextDto getContext(ContextQuery query) throws SQLException{
+    public ContextDto getContext(ContextRetrievalPayload query) throws SQLException{
         try (Connection conn = connectionPool.getConnection()){
         ContextDto contextDto = contextDao.getContext(query, conn);
         Map<Integer,DefinitionDto> definitionsMap = contextDto.getDefinitionsMap();

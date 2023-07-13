@@ -2,9 +2,9 @@ package com.wordify.api.service.collectionService;
 
 import java.sql.SQLException;
 
-import com.wordify.api.dto.params.CollectionQuery;
+import com.wordify.api.dto.payloads.CollectionTargetPayload;
 
 public interface CollectionService {
-    public void addCollection(CollectionQuery query)throws SQLException;
-    public void removeCollection(CollectionQuery query)throws SQLException;
+    public void addCollection(CollectionTargetPayload query)throws SQLException;
+    public void removeCollection(CollectionTargetPayload query)throws SQLException;
 }

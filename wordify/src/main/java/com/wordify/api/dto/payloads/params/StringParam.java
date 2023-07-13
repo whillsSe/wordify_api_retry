@@ -1,5 +1,4 @@
-package com.wordify.api.dto.params;
-
+package com.wordify.api.dto.payloads.params;
 
 public class StringParam implements ICustomParam {
     private String value;

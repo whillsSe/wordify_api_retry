@@ -1,4 +1,4 @@
-package com.wordify.api.dto.params;
+package com.wordify.api.dto.payloads.params;
 
 
 public interface ICustomParam {

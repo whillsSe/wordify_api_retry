@@ -6,6 +6,6 @@ import java.sql.SQLException;
 import com.wordify.api.dto.BaseEntityDto;
 
 public interface WordDao {
-    BaseEntityDto retrieveOrCreate(BaseEntityDto wordDto,Connection conn) throws SQLException;
+    int retrieveOrCreate(String wordString,Connection conn) throws SQLException;
     BaseEntityDto findById(int i);
 }

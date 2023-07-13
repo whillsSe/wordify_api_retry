@@ -3,15 +3,15 @@ package com.wordify.api.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wordify.api.dto.params.EntryQuery;
-import com.wordify.api.dto.params.ICustomParam;
-import com.wordify.api.dto.params.IScopeQuery;
-import com.wordify.api.dto.params.IntParam;
-import com.wordify.api.dto.params.StringParam;
+import com.wordify.api.dto.payloads.EntrySearchPayload;
+import com.wordify.api.dto.payloads.ISearchScopePayload;
+import com.wordify.api.dto.payloads.params.ICustomParam;
+import com.wordify.api.dto.payloads.params.IntParam;
+import com.wordify.api.dto.payloads.params.StringParam;
 import com.wordify.api.dto.utils.SubqueryResult;
 
 public class SubqueryUtil {
-    public static SubqueryResult createSubquery(IScopeQuery scope){
+    public static SubqueryResult createSubquery(ISearchScopePayload scope){
         StringBuilder builder = new StringBuilder("SELECT definition_id,user_id FROM ");
         List<ICustomParam> parameter = new ArrayList<>();
         switch(scope.getScope()){
@@ -34,7 +34,7 @@ public class SubqueryUtil {
         }
         return new SubqueryResult(builder.toString(),parameter);
     }
-    public static SubqueryResult createEntryWhereClause(EntryQuery query){
+    public static SubqueryResult createEntryWhereClause(EntrySearchPayload query){
         //wordで検索なのかphoneticで検索なのか、タグも併用するのかを分析する必要
         //「かつ」のみの実装とする？全部ひらがなの時に「または」が必要か…
         //ひとまず、「word」or「phonetic」かつ「tag」とする！

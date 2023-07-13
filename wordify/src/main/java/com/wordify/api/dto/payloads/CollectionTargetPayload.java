@@ -1,10 +1,10 @@
-package com.wordify.api.dto.params;
+package com.wordify.api.dto.payloads;
 
-public class CollectionQuery implements IBaseQuery{
+public class CollectionTargetPayload implements IBasePayload{
     private Integer userId;
     private Integer definitionId;
     
-    public CollectionQuery(Integer userId){
+    public CollectionTargetPayload(Integer userId){
         this.userId = userId;
     }
     @Override

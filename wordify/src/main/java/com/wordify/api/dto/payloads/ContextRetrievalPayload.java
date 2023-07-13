@@ -1,12 +1,12 @@
-package com.wordify.api.dto.params;
+package com.wordify.api.dto.payloads;
 
-public class ContextQuery implements IScopeQuery{
+public class ContextRetrievalPayload implements ISearchScopePayload{
     private int userId;
     private String scope;
     private int scopeId;
     private int wordId;
     private int phoneticId;
-    public ContextQuery(int userId){
+    public ContextRetrievalPayload(int userId){
         this.userId = userId;
     }
     @Override

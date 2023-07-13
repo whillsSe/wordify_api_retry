@@ -18,10 +18,10 @@ public class WordDaoImpl implements WordDao{
   }
 
   @Override
-  public BaseEntityDto retrieveOrCreate(BaseEntityDto wordDto,Connection conn) throws SQLException{
+  public int retrieveOrCreate(String wordString,Connection conn) throws SQLException{
     StringBuilder builder = DaoUtils.createStringBuilder("word");
     try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(),Statement.RETURN_GENERATED_KEYS)){
-      pstmt.setString(1, wordDto.getValue());
+      pstmt.setString(1, wordString);
       int affectedRows = pstmt.executeUpdate();
       if(affectedRows == 0){
         throw new SQLException("Creating word failed, no rows affected.");
@@ -30,14 +30,12 @@ public class WordDaoImpl implements WordDao{
       try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
         if(generatedKeys.next()){
           int id = generatedKeys.getInt(1);
-          wordDto.setId(id);
+          return id;
         }else{
           throw new SQLException("Creating word failed, no ID obtained.");
         }
       }
-      return wordDto;
     }
-    
   }
     
 }

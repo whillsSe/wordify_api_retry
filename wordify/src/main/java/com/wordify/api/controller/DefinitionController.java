@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
 import com.wordify.api.dto.DefinitionDto;
+import com.wordify.api.dto.payloads.EntryRegistrationPayload;
 import com.wordify.api.service.definitionService.DefinitionService;
 import com.wordify.api.utils.ObjectMapperSingleton;
 
@@ -24,8 +25,8 @@ public class DefinitionController extends AbstractController{
         Callable<String> rask = () -> {
             String requestBody = ControllerUtils.readRequestBody(req);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();
-            DefinitionDto requestedValue = mapper.readValue(requestBody,DefinitionDto.class);
-            requestedValue.setAuthorId((Integer)req.getAttribute("user"));
+            EntryRegistrationPayload requestedValue = mapper.readValue(requestBody,EntryRegistrationPayload.class);
+            requestedValue.setUserId((Integer)req.getAttribute("user"));
             DefinitionDto dto = service.registerDefinition(requestedValue);
             String json = mapper.writeValueAsString(dto);
             return json;

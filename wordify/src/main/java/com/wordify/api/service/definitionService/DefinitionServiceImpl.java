@@ -2,6 +2,8 @@ package com.wordify.api.service.definitionService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
@@ -20,7 +22,9 @@ import com.wordify.api.dao.tagging.TaggingDao;
 import com.wordify.api.dao.tagging.TaggingDaoImpl;
 import com.wordify.api.dao.word.WordDao;
 import com.wordify.api.dao.word.WordDaoImpl;
+import com.wordify.api.dto.BaseEntityDto;
 import com.wordify.api.dto.DefinitionDto;
+import com.wordify.api.dto.payloads.EntryRegistrationPayload;
 
 public class DefinitionServiceImpl implements DefinitionService{
     private ConnectionPool connectionPool;
@@ -43,7 +47,7 @@ public class DefinitionServiceImpl implements DefinitionService{
         this.collectionDao = new CollectionDaoImpl(); 
         this.taggingDao = new TaggingDaoImpl();
     }
-    public DefinitionDto registerDefinition(EntryDto)throws SQLException{
+    public DefinitionDto registerDefinition(EntryRegistrationPayload payload)throws SQLException{
         //word,phonetic,tagを呼び出します
         //それぞれを検証・登録します。主キーidを取得します。
         //definitionを登録します。主キーidを取得します。
@@ -52,7 +56,29 @@ public class DefinitionServiceImpl implements DefinitionService{
         Connection conn = connectionPool.getConnection();
         conn.setAutoCommit(false);
         //BaseEntityDtoを渡して、BaseEntityDtoを返すべきでは？
-        BaseEntityDto wordDto = wordDao.retrieveOrCreate(, conn)
+        String wordString = payload.getWordString();
+        int wordId = wordDao.retrieveOrCreate(wordString, conn);
+        BaseEntityDto wordDto = new BaseEntityDto(wordId, wordString);
+
+        //メモ：取得との統一感としても、引数Objで渡す⇒欲しいdtoで返す方が統一感があった気がする。
+
+        String phoneticString = payload.getPhoneticString();
+        int phoneticId = phoneticDao.retrieveOrCreate(phoneticString, conn);
+        BaseEntityDto phoneticDto = new BaseEntityDto(phoneticId, phoneticString);
+
+        String[] tagStrings = payload.getTagStrings();
+        int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
+        List<BaseEntityDto> tags = new ArrayList<>();
+        for(int i=0;i<tagStrings.length;i++){
+            tags.add(new BaseEntityDto(tagIds[i],tagStrings[i]));
+        }
+        int userId = payload.getUserId();
+        int definitionId = definitionDao.registerDefinition(userId,wordId,phoneticId,conn);
+
+        int meaningId = meaningDao.registerMeaning(userId,definitionId,payload.getMeaningString(),conn);
+        int[] exampleIds = exampleDao.registerExample(userId,definitionId,payload.getExampleStrings(),conn);
+        taggingDao. 
+
         //BaseEntityDto phoneticDto = phoneticDao.
         //BaseEntityDto[] tagIds = tagDao.
     }

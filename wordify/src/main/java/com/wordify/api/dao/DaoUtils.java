@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wordify.api.dto.params.ICustomParam;
-import com.wordify.api.dto.params.IntParam;
-import com.wordify.api.dto.params.StringParam;
+import com.wordify.api.dto.payloads.params.ICustomParam;
+import com.wordify.api.dto.payloads.params.IntParam;
+import com.wordify.api.dto.payloads.params.StringParam;
 
 public class DaoUtils {
     public static void setParameters(PreparedStatement pstmt, List<ICustomParam> params,int count) throws SQLException {

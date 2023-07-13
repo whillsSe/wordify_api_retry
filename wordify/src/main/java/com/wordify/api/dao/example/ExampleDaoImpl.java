@@ -10,7 +10,7 @@ import java.util.Map;
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
 import com.wordify.api.dto.ExampleDto;
-import com.wordify.api.dto.params.ICustomParam;
+import com.wordify.api.dto.payloads.params.ICustomParam;
 import com.wordify.api.utils.SQLUtils;
 
 public class ExampleDaoImpl implements ExampleDao{

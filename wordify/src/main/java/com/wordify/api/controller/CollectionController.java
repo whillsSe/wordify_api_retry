@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ResponseEntity;
-import com.wordify.api.dto.params.CollectionQuery;
+import com.wordify.api.dto.payloads.CollectionTargetPayload;
 import com.wordify.api.service.collectionService.CollectionService;
 import com.wordify.api.utils.ObjectMapperSingleton;
 
@@ -23,7 +23,7 @@ public class CollectionController extends AbstractController{
         Callable<String> task = () -> {
             Integer userId = (Integer) req.getAttribute("user");
             Integer definitionId = Integer.parseInt(req.getParameter("dId"));
-            CollectionQuery query = new CollectionQuery(userId);
+            CollectionTargetPayload query = new CollectionTargetPayload(userId);
             query.setDefinitionId(definitionId);
             service.addCollection(query);
 
@@ -39,7 +39,7 @@ public class CollectionController extends AbstractController{
         Callable<String> task = () -> {
             Integer userId = (Integer) req.getAttribute("user");
             Integer definitionId = Integer.parseInt(req.getParameter("dId"));
-            CollectionQuery query = new CollectionQuery(userId);
+            CollectionTargetPayload query = new CollectionTargetPayload(userId);
             query.setDefinitionId(definitionId);
             service.removeCollection(query);
 

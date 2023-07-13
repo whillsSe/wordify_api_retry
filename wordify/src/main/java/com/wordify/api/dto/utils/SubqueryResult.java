@@ -2,7 +2,7 @@ package com.wordify.api.dto.utils;
 
 import java.util.List;
 
-import com.wordify.api.dto.params.ICustomParam;
+import com.wordify.api.dto.payloads.params.ICustomParam;
 
 public class SubqueryResult {
     private String query;

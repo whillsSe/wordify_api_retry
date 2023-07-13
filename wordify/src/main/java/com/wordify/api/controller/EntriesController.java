@@ -12,8 +12,8 @@ import com.wordify.api.controller.utils.ControllerUtils;
 import com.wordify.api.controller.viewmodel.ContextDtoViewModel;
 import com.wordify.api.dto.ContextDto;
 import com.wordify.api.dto.EntryDto;
-import com.wordify.api.dto.params.ContextQuery;
-import com.wordify.api.dto.params.EntryQuery;
+import com.wordify.api.dto.payloads.ContextRetrievalPayload;
+import com.wordify.api.dto.payloads.EntrySearchPayload;
 import com.wordify.api.service.entryService.EntryService;
 import com.wordify.api.utils.ObjectMapperSingleton;
 
@@ -29,7 +29,7 @@ public class EntriesController extends AbstractController{
     public void handleGetEntriesRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
         Callable<String> task = () -> {
             List<EntryDto> list = new ArrayList<EntryDto>();
-            EntryQuery query = ControllerUtils.getEntryQuery(req);
+            EntrySearchPayload query = ControllerUtils.getEntryQuery(req);
             query.setWordString(req.getParameter("word"));
             query.setPhoneticString(req.getParameter("phonetic"));
             String tags = req.getParameter("tag");
@@ -46,7 +46,7 @@ public class EntriesController extends AbstractController{
 
     public void handleGetContextRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException{
         Callable<String> task = () -> {
-            ContextQuery query = ControllerUtils.getContextQuery(req);
+            ContextRetrievalPayload query = ControllerUtils.getContextQuery(req);
 
             ContextDto dto = service.getContext(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();

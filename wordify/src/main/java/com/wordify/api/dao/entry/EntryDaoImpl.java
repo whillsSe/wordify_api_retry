@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dto.EntryDto;
-import com.wordify.api.dto.params.EntryQuery;
+import com.wordify.api.dto.payloads.EntrySearchPayload;
 import com.wordify.api.dto.utils.SubqueryResult;
 import com.wordify.api.utils.SubqueryUtil;
 
@@ -20,7 +20,7 @@ public class EntryDaoImpl implements EntryDao{
     }
 
     //トランザクション管理が必要
-    public List<EntryDto> getEntry(EntryQuery query,Connection conn){
+    public List<EntryDto> getEntry(EntrySearchPayload query,Connection conn){
         SubqueryResult subqueryResult = SubqueryUtil.createSubquery(query);
         SubqueryResult whereClauseResult = SubqueryUtil.createEntryWhereClause(query);
         StringBuilder builder = new StringBuilder("SELECT word,w.id AS wordId,phonetic,p.id AS phoneticId FROM definitions d JOIN (");

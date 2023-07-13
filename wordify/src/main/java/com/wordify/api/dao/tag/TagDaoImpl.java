@@ -13,7 +13,7 @@ import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
 import com.wordify.api.dto.BaseEntityDto;
 import com.wordify.api.dto.TagDto;
-import com.wordify.api.dto.params.ICustomParam;
+import com.wordify.api.dto.payloads.params.ICustomParam;
 import com.wordify.api.utils.SQLUtils;
 
 public class TagDaoImpl implements TagDao{
@@ -37,13 +37,14 @@ public class TagDaoImpl implements TagDao{
         }
       }
     @Override
-    public List<BaseEntityDto> retrieveOrCreate(List<BaseEntityDto> dtos, Connection conn) throws SQLException{
-        List<BaseEntityDto> processedDtos = new ArrayList<>();
+    public int[] retrieveOrCreate(String[] tagStrings, Connection conn) throws SQLException{
+        int[] tagIds = new int[tagStrings.length];
         StringBuilder builder = DaoUtils.createStringBuilder("tag");
         
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(), Statement.RETURN_GENERATED_KEYS)){
-            for (BaseEntityDto dto : dtos) {
-                pstmt.setString(1, dto.getValue());
+            for (int i=0;i<tagStrings.length;i++) {
+                String tagString = tagStrings[i];
+                pstmt.setString(1, tagString);
                 int affectedRows = pstmt.executeUpdate();
                 if (affectedRows == 0) {
                     throw new SQLException("Creating tag failed, no rows affected.");
@@ -52,8 +53,7 @@ public class TagDaoImpl implements TagDao{
                 try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
                     if(generatedKeys.next()){
                         int id = generatedKeys.getInt(1);
-                        dto.setId(id);
-                        processedDtos.add(dto);
+                        tagIds[i] = id;
                     } else {
                         throw new SQLException("Creating tag failed, no ID obtained.");
                     }
@@ -61,7 +61,7 @@ public class TagDaoImpl implements TagDao{
                 pstmt.clearParameters();
             }
         }
-        return processedDtos;
+        return tagIds;
     }
 
     }
