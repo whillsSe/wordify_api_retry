@@ -7,12 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.wordify.api.config.ConnectionPool;
-import com.wordify.api.dao.collection.CollectionDao;
-import com.wordify.api.dao.collection.CollectionDaoImpl;
 import com.wordify.api.dao.context.ContextDao;
 import com.wordify.api.dao.context.ContextDaoImpl;
-import com.wordify.api.dao.definition.DefinitionDao;
-import com.wordify.api.dao.definition.DefinitionDaoImpl;
+
 import com.wordify.api.dao.entry.EntryDao;
 import com.wordify.api.dao.entry.EntryDaoImpl;
 import com.wordify.api.dao.example.ExampleDao;
@@ -21,7 +18,6 @@ import com.wordify.api.dao.meaning.MeaningDao;
 import com.wordify.api.dao.meaning.MeaningDaoImpl;
 import com.wordify.api.dao.tag.TagDao;
 import com.wordify.api.dao.tag.TagDaoImpl;
-import com.wordify.api.dao.tagging.TaggingDao;
 import com.wordify.api.dto.ContextDto;
 import com.wordify.api.dto.DefinitionDto;
 import com.wordify.api.dto.EntryDto;

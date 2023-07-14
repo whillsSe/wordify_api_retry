@@ -107,4 +107,8 @@ public class DefinitionServiceImpl implements DefinitionService{
 
         return dto;
     }
+
+    public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){
+        
+    }
 }

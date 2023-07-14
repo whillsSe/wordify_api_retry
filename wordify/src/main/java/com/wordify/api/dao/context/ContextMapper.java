@@ -40,7 +40,7 @@ public class ContextMapper {
             DefinitionDto definition = new DefinitionDto();
             Integer definitionId = resultSet.getInt("definition_id");
             definition.setId(definitionId);
-            definition.setAuthorId(resultSet.getInt("user_id"));
+            definition.setAuthorId(resultSet.getInt("author_id"));
             definition.setCollectorId(resultSet.getInt("collector_id"));
             definitions.put(definitionId,definition);
         }

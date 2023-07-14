@@ -1,0 +1,17 @@
+認証関連メモ
+
+ログイン画面⇒ログイン情報送信
+ログイン情報受信⇒JWTトークン類送信☆
+
+JWTトークン類受信⇒コンテンツページ展開⇒コンテンツ要素請求リクエスト
+コンテンツ要素請求リクエスト受信⇒…
+
+アクセストークン期限切れの場合
+
+☆以下のようにサブドメインを設定
+webサーバー：wordify.com
+apiサーバー：api.wordify.com
+authサーバー：auth.wordify.com
+
+リフレッシュトークンは、HttpOnlyなCookieとし、auth.wordify.comをDomainとして設定する。
+

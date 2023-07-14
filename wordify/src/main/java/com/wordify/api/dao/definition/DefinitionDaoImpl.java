@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class DefinitionDaoImpl implements DefinitionDao{
     public int registerDefinition(int userId,int wordId,int phoneticId,Connection conn) throws SQLException{
-        StringBuilder builder = new StringBuilder("INSERT INTO definitions(user_id,word_id,phonetic_id) VALUES(?,?,?);");
+        StringBuilder builder = new StringBuilder("INSERT INTO definitions(author_id,word_id,phonetic_id) VALUES(?,?,?);");
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(),Statement.RETURN_GENERATED_KEYS)){
             pstmt.setInt(1, userId);
             pstmt.setInt(2, wordId);

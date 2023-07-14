@@ -12,19 +12,19 @@ import com.wordify.api.dto.utils.SubqueryResult;
 
 public class SubqueryUtil {
     public static SubqueryResult createSubquery(ISearchScopePayload scope){
-        StringBuilder builder = new StringBuilder("SELECT definition_id,user_id AS collector_id FROM ");
+        StringBuilder builder = new StringBuilder("SELECT definition_id,collector_id AS collector_id FROM ");
         List<ICustomParam> parameter = new ArrayList<>();
         switch(scope.getScope()){
             case "self":
-                builder.append("collection c WHERE user_id = ?");
+                builder.append("collection c WHERE collector_id = ?");
                 parameter.add(new IntParam(scope.getUserId()));
             break;
             case "follows":
-                builder.append("collection c WHERE user_id IN (SELECT follwing FROM follows WHERE follower = ?)");
+                builder.append("collection c WHERE collector_id IN (SELECT follwing FROM follows WHERE follower = ?)");
                 parameter.add(new IntParam(scope.getUserId()));
                 break;
             case "specific":
-                builder.append("collection c WHERE user_id = ?");
+                builder.append("collection c WHERE collector_id = ?");
                 parameter.add(new IntParam(scope.getScopeId()));//本当なら、そのユーザの投稿の閲覧権限があるのかを確認する必要がありそう。
             break;
             case "dictionary":
