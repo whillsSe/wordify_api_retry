@@ -4,8 +4,9 @@ public class CollectionTargetPayload implements IBasePayload{
     private Integer userId;
     private Integer definitionId;
     
-    public CollectionTargetPayload(Integer userId){
+    public CollectionTargetPayload(Integer userId,Integer definitionId){
         this.userId = userId;
+        this.definitionId = definitionId;
     }
     @Override
     public int getUserId() {

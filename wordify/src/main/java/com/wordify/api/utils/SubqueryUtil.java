@@ -12,7 +12,7 @@ import com.wordify.api.dto.utils.SubqueryResult;
 
 public class SubqueryUtil {
     public static SubqueryResult createSubquery(ISearchScopePayload scope){
-        StringBuilder builder = new StringBuilder("SELECT definition_id,user_id FROM ");
+        StringBuilder builder = new StringBuilder("SELECT definition_id,user_id AS collector_id FROM ");
         List<ICustomParam> parameter = new ArrayList<>();
         switch(scope.getScope()){
             case "self":

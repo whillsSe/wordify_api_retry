@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
@@ -34,5 +35,21 @@ public class MeaningDaoImpl implements MeaningDao{
       }catch(SQLException e){
         throw new Error("SQLException has happened!");
       }
-    } 
-}
+    }
+
+    @Override
+    public int registerMeaning(int definitionId,String meaninString,Connection conn)throws SQLException{
+      StringBuilder builder = new StringBuilder("INSERT INTO meanings(definition_id,meaning) VALUES(?,?)");
+      try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(),Statement.RETURN_GENERATED_KEYS)){
+        pstmt.setInt(1,definitionId);
+        pstmt.setString(2, meaninString);
+        try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
+          if(generatedKeys.next()){
+            int id = generatedKeys.getInt(1);
+            return id;
+          }else{
+            throw new SQLException("Creating meaning failed, no ID obtained.");
+          }
+      }
+    }
+}}

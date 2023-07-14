@@ -74,21 +74,6 @@ entryの削除=definitionの削除
 entry(見出し項目)の取得=collection/definition/他に対するEntry要素の取得
 entry(詳細項目)の取得=collection/definition/他に対するContext要素の取得
 
-以上を踏まえると、
-DefinitionServiceで上三つを
-EntryServiceで下二つを
-担当するのがよさそうだけど、
-
-EntriesServlet
-└EntriesController
-    ├handleGetEntriesRequest(use:EntryService)
-    ├handleGetContextRequest(use:EntryService)
-    ├handlePostEntriesRequest(use:DefinitionService)
-    ├handlePutEntriesRequest(use:DefinitionService)
-    └handleDeleteEntriesRequest(use:DefinitionService)
-
-とするべきか、
-
 EntriesServlet
 ├EntriesController
 │   ├handleGetEntriesRequest(use:EntryService)
@@ -100,3 +85,7 @@ EntriesServlet
     └handleDeleteEntriesRequest(use:DefinitionService)
 
 とするべきか、他にもいくつもパターンはあると思うけど、決め方や考え方のアドバイスや適切な設計の提案があれば教えて。
+
+バリデーションの実装箇所・実装方法を考える。
+filter①：クライアントサイドで入力されたときに、画面文字に反映する前に内部的にはサニタイズする？
+filter②：リクエスト受付時にサニタイズを実行。

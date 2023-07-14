@@ -1,11 +1,23 @@
 package com.wordify.api.dto.payloads;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class EntryRegistrationPayload {
     private Integer userId;
+    @Size(min = 1 ,max = 20)
     private String wordString;
+    @Size(min = 1 ,max = 20)
+    @Pattern(regexp = "[\\u3041-\\u3096ー]",message = "[${validatedValue}]は[{regexp}]に一致しません。"+"ひらがな、もしくは伸ばし棒(’ー’)のみが使用できます。")
     private String phoneticString;
+    @Size(min = 1 ,max = 20)
+    @Valid
     private String[] tagStrings;
+    @Size(min=0,max=400)
     private String MeaningString;
+    @Size(min=0,max=100)
+    @Valid
     private String[] exampleString;
     
     public String getWordString() {

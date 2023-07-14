@@ -23,8 +23,7 @@ public class CollectionController extends AbstractController{
         Callable<String> task = () -> {
             Integer userId = (Integer) req.getAttribute("user");
             Integer definitionId = Integer.parseInt(req.getParameter("dId"));
-            CollectionTargetPayload query = new CollectionTargetPayload(userId);
-            query.setDefinitionId(definitionId);
+            CollectionTargetPayload query = new CollectionTargetPayload(userId,definitionId);
             service.addCollection(query);
 
             ResponseEntity responseEntity = new ResponseEntity("success", "Record has been successfully inserted.");
@@ -39,8 +38,7 @@ public class CollectionController extends AbstractController{
         Callable<String> task = () -> {
             Integer userId = (Integer) req.getAttribute("user");
             Integer definitionId = Integer.parseInt(req.getParameter("dId"));
-            CollectionTargetPayload query = new CollectionTargetPayload(userId);
-            query.setDefinitionId(definitionId);
+            CollectionTargetPayload query = new CollectionTargetPayload(userId,definitionId);
             service.removeCollection(query);
 
             ResponseEntity responseEntity = new ResponseEntity("success", "Record has been successfully inserted.");

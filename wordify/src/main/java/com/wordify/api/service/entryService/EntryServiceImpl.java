@@ -66,7 +66,7 @@ public class EntryServiceImpl implements EntryService{
         Map<Integer,MeaningDto> meaningsResult = meaningDao.getMapByDefinitionIds(definitionIds,conn);
         Map<Integer,List<ExampleDto>> examplesResult = exampleDao.getMapWithListByDefinitionIds(definitionIds,conn);
         Map<Integer,List<TagDto>> tagsResult = tagDao.getMapWithListByDefinitionIds(definitionIds, conn);
-      
+        //definitionから、userIdと
         for(Integer definitionId: definitionIds){
             DefinitionDto definition = definitionsMap.get(definitionId);
       

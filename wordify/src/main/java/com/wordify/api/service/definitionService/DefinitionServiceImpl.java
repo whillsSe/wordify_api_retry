@@ -23,7 +23,11 @@ import com.wordify.api.dao.tagging.TaggingDaoImpl;
 import com.wordify.api.dao.word.WordDao;
 import com.wordify.api.dao.word.WordDaoImpl;
 import com.wordify.api.dto.BaseEntityDto;
-import com.wordify.api.dto.DefinitionDto;
+import com.wordify.api.dto.DefinitionDtoWithEntryInfo;
+import com.wordify.api.dto.ExampleDto;
+import com.wordify.api.dto.MeaningDto;
+import com.wordify.api.dto.TagDto;
+import com.wordify.api.dto.payloads.CollectionTargetPayload;
 import com.wordify.api.dto.payloads.EntryRegistrationPayload;
 
 public class DefinitionServiceImpl implements DefinitionService{
@@ -47,7 +51,7 @@ public class DefinitionServiceImpl implements DefinitionService{
         this.collectionDao = new CollectionDaoImpl(); 
         this.taggingDao = new TaggingDaoImpl();
     }
-    public DefinitionDto registerDefinition(EntryRegistrationPayload payload)throws SQLException{
+    public DefinitionDtoWithEntryInfo registerDefinition(EntryRegistrationPayload payload)throws SQLException{
         //word,phonetic,tagを呼び出します
         //それぞれを検証・登録します。主キーidを取得します。
         //definitionを登録します。主キーidを取得します。
@@ -61,25 +65,46 @@ public class DefinitionServiceImpl implements DefinitionService{
         BaseEntityDto wordDto = new BaseEntityDto(wordId, wordString);
 
         //メモ：取得との統一感としても、引数Objで渡す⇒欲しいdtoで返す方が統一感があった気がする。
-
+            //追記：どんなdto型で返すかが不透明だし、dtoで返すとidとか毎回getで呼び出して埋め込んで…と煩雑。
         String phoneticString = payload.getPhoneticString();
         int phoneticId = phoneticDao.retrieveOrCreate(phoneticString, conn);
         BaseEntityDto phoneticDto = new BaseEntityDto(phoneticId, phoneticString);
 
         String[] tagStrings = payload.getTagStrings();
         int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
-        List<BaseEntityDto> tags = new ArrayList<>();
+        List<TagDto> tags = new ArrayList<>();
         for(int i=0;i<tagStrings.length;i++){
-            tags.add(new BaseEntityDto(tagIds[i],tagStrings[i]));
+            tags.add(new TagDto(tagIds[i],tagStrings[i]));
         }
         int userId = payload.getUserId();
         int definitionId = definitionDao.registerDefinition(userId,wordId,phoneticId,conn);
 
-        int meaningId = meaningDao.registerMeaning(userId,definitionId,payload.getMeaningString(),conn);
-        int[] exampleIds = exampleDao.registerExample(userId,definitionId,payload.getExampleStrings(),conn);
-        taggingDao. 
+        String meaninString = payload.getMeaningString();
+        int meaningId = meaningDao.registerMeaning(definitionId,meaninString,conn);
+        MeaningDto meaningDto = new MeaningDto(meaningId, meaninString);
 
-        //BaseEntityDto phoneticDto = phoneticDao.
-        //BaseEntityDto[] tagIds = tagDao.
+        String[] exampleStrings = payload.getExampleStrings();
+        int[] exampleIds = exampleDao.registerExample(definitionId,exampleStrings,conn);
+        List<ExampleDto> examples = new ArrayList<>();
+        for(int i=0;i<exampleStrings.length;i++){
+            examples.add(new ExampleDto(exampleIds[i],exampleStrings[i]));
+        }
+
+        taggingDao.addTagging(definitionId,tagIds,conn);
+        CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
+        collectionDao.addDefinition(collectionPayload,conn);
+
+        conn.commit();
+
+        DefinitionDtoWithEntryInfo dto = new DefinitionDtoWithEntryInfo();
+        dto.setId(definitionId);
+        dto.setAuthorId(userId);
+        dto.setWord(wordDto);
+        dto.setPhonetic(phoneticDto);
+        dto.setMeaning(meaningDto);
+        dto.setExamples(examples);
+        dto.setTags(tags);
+
+        return dto;
     }
 }

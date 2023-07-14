@@ -41,6 +41,7 @@ public class ContextMapper {
             Integer definitionId = resultSet.getInt("definition_id");
             definition.setId(definitionId);
             definition.setAuthorId(resultSet.getInt("user_id"));
+            definition.setCollectorId(resultSet.getInt("collector_id"));
             definitions.put(definitionId,definition);
         }
         return new ContextDto(prevEntry,nextEntry,definitions);

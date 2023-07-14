@@ -3,7 +3,6 @@ package com.wordify.api.servlet;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
-import javax.imageio.IIOException;
 import javax.naming.NamingException;
 
 import com.wordify.api.config.ConnectionPool;

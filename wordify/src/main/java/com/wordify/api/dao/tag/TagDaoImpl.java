@@ -5,13 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
-import com.wordify.api.dto.BaseEntityDto;
 import com.wordify.api.dto.TagDto;
 import com.wordify.api.dto.payloads.params.ICustomParam;
 import com.wordify.api.utils.SQLUtils;

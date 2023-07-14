@@ -5,6 +5,7 @@ import java.util.List;
 public class DefinitionDto {//Contextの一部項目としてのDefinitionのDto。
     private int id;
     private int authorId;
+    private int collectorId;
     private MeaningDto meaning;
     private List<ExampleDto> examples;
     private List<TagDto> tags;
@@ -37,5 +38,11 @@ public class DefinitionDto {//Contextの一部項目としてのDefinitionのDto
     }
     public void setTags(List<TagDto> tags) {
         this.tags = tags;
+    }
+    public int getCollectorId() {
+        return collectorId;
+    }
+    public void setCollectorId(int collectorId) {
+        this.collectorId = collectorId;
     }
 }
