@@ -44,14 +44,16 @@ public class EntriesServlet extends HttpServlet{
     protected void doPost(HttpServletRequest req,HttpServletResponse res)throws IOException{
         definitionController.handlePostRequest(req, res);
     }
-
+/* 
     @Override
     protected void doPut(HttpServletRequest req,HttpServletResponse res)throws IOException{
         definitionController.handlePutRequest(req,res);
     }
-
+    */
+/*
     @Override
     protected void doDelete(HttpServletRequest req,HttpServletResponse res)throws IOException{
         definitionController.handleDeleteRequest(req,res);
     }
+    */
 }

@@ -1,16 +1,15 @@
 package com.wordify.api.dto;
 
-import java.util.Map;
+import java.util.List;
 
 public class ContextDto {
     EntryDto prevEntry;
     EntryDto nextEntry;
-    Map<Integer,DefinitionDto> definitionsMap;//Mapにしてるけど、definitionの表示に優先順位をつけるならちょっと考えないといけない
-    
-    public ContextDto(EntryDto prevEntry, EntryDto nextEntry, Map<Integer,DefinitionDto> definitionsMap) {
+    List<DefinitionDto> definitionsList;//Mapにしてるけど、definitionの表示に優先順位をつけるならちょっと考えないといけない
+    public ContextDto(EntryDto prevEntry, EntryDto nextEntry, List<DefinitionDto> definitionsList) {
         this.prevEntry = prevEntry;
         this.nextEntry = nextEntry;
-        this.definitionsMap = definitionsMap;
+        this.definitionsList = definitionsList;
     }
     public EntryDto getPrevEntry() {
         return prevEntry;
@@ -18,8 +17,8 @@ public class ContextDto {
     public EntryDto getNextEntry() {
         return nextEntry;
     }
-    public Map<Integer,DefinitionDto> getDefinitionsMap() {
-        return definitionsMap;
+    public List<DefinitionDto> getDefinitionsList() {
+        return definitionsList;
     }
     
 }

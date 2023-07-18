@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
 import com.wordify.api.controller.viewmodel.ContextDtoViewModel;
+import com.wordify.api.controller.viewmodel.EntryDtoViewModel;
 import com.wordify.api.dto.ContextDto;
 import com.wordify.api.dto.EntryDto;
 import com.wordify.api.dto.payloads.ContextRetrievalPayload;
@@ -57,9 +58,19 @@ public class EntriesController extends AbstractController{
     }
     private ContextDtoViewModel convertContextDtoToViewModel(ContextDto dto){
         ContextDtoViewModel viewModel = new ContextDtoViewModel();
-        viewModel.setPrevEntry(dto.getPrevEntry());
-        viewModel.setNextEntry(dto.getNextEntry());
-        viewModel.setDefinitions(new ArrayList<>(dto.getDefinitionsMap().values()));
+        EntryDtoViewModel prev = convertEntryDtoToViewModel(dto.getPrevEntry());
+        EntryDtoViewModel next = convertEntryDtoToViewModel(dto.getNextEntry());
+        viewModel.setDefinitions(dto.getDefinitionsList());
+        viewModel.setPrev(prev);
+        viewModel.setNext(next);
+        return viewModel;
+    }
+    private EntryDtoViewModel convertEntryDtoToViewModel(EntryDto dto){
+        EntryDtoViewModel viewModel = new EntryDtoViewModel();
+        viewModel.setWord(dto.getWord().getValue());
+        viewModel.setWordId(dto.getWord().getId());
+        viewModel.setPhonetic(dto.getPhonetic().getValue());
+        viewModel.setPhoneticId(dto.getPhonetic().getId());
         return viewModel;
     }
 }

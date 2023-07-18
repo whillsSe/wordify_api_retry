@@ -34,7 +34,7 @@ public class DefinitionController extends AbstractController{
         };
         handleAsyncRequest(task, res);
     }
-
+/* 
     public void handlePutRequest(HttpServletRequest req,HttpServletResponse res) throws IOException{
         Callable<String> task = () -> {
             String requestBody = ControllerUtils.readRequestBody(req);
@@ -47,4 +47,5 @@ public class DefinitionController extends AbstractController{
        };
        handleAsyncRequest(task, res);
     }
+    */
 }

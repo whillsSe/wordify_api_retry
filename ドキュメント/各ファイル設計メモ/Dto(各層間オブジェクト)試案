@@ -1,0 +1,33 @@
+各層間でデータの授受を行うオブジェクトの定義について
+
+Word:
+    書き込み時：String
+    読み出し時：int,String
+Phonetic:
+    書き込み時：String
+    読み出し時：int,String
+Tag:
+    書き込み時：String
+    読み出し時：int,String
+Meaning:
+    書き込み時：int,String
+    読み出し時：int,int,String
+Example:
+    書き込み時：int,String
+    読み出し時：int,int,String
+
+tagging:
+    書き込み時：int,int
+    読み出し時：---
+
+user:
+    書き込み時：色々
+    読み出し時：int,String,String他
+
+Context:
+    書き込み時：---
+    読み出し時：
+
+Entry:
+    書き込み時：---
+    読み出し時：

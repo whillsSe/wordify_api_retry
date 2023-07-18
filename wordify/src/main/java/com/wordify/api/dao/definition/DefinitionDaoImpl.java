@@ -19,7 +19,7 @@ public class DefinitionDaoImpl implements DefinitionDao{
                     int id = generatedKeys.getInt(1);
                     return id;
                 }else{
-                    throw new SQLException("Creating word failed, no ID obtained.");
+                    throw new SQLException("Creating definition failed, no ID obtained.");
                 }
         }
     }

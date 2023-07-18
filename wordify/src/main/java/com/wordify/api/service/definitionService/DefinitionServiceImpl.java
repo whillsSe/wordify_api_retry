@@ -107,8 +107,16 @@ public class DefinitionServiceImpl implements DefinitionService{
 
         return dto;
     }
-
+/* 
     public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){
-        
+        //Dtoの中のidを読んで、idが未設定だったら新しく参照をとる、でいいような気もする。
+        //word
+        //phonetic
+        //tag
+        //meaning,exampleに関しては、送られてきた内容をそのまま更新かけるだけで良いはず。
+        //examplesとかに関してはもっと項目数減らしても良いかもしれないが。
+        //meaning
+        //examples
     }
+*/
 }

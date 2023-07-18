@@ -2,8 +2,8 @@ package com.wordify.api.dao.context;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.wordify.api.dto.BaseEntityDto;
 import com.wordify.api.dto.ContextDto;
@@ -12,7 +12,7 @@ import com.wordify.api.dto.EntryDto;
 
 public class ContextMapper {
     public ContextDto map(ResultSet resultSet) throws SQLException{
-        Map<Integer,DefinitionDto> definitions = new HashMap<>();
+        List<DefinitionDto> definitions = new ArrayList<>();
         EntryDto prevEntry = null;
         EntryDto nextEntry = null;
 
@@ -42,7 +42,7 @@ public class ContextMapper {
             definition.setId(definitionId);
             definition.setAuthorId(resultSet.getInt("author_id"));
             definition.setCollectorId(resultSet.getInt("collector_id"));
-            definitions.put(definitionId,definition);
+            definitions.add(definition);
         }
         return new ContextDto(prevEntry,nextEntry,definitions);
     }

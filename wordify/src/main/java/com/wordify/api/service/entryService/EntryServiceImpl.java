@@ -3,8 +3,10 @@ package com.wordify.api.service.entryService;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.context.ContextDao;
@@ -57,15 +59,19 @@ public class EntryServiceImpl implements EntryService{
     public ContextDto getContext(ContextRetrievalPayload query) throws SQLException{
         try (Connection conn = connectionPool.getConnection()){
         ContextDto contextDto = contextDao.getContext(query, conn);
-        Map<Integer,DefinitionDto> definitionsMap = contextDto.getDefinitionsMap();
-        List<Integer> definitionIds = new ArrayList<>(definitionsMap.keySet());
+        List<DefinitionDto> definitionsList = contextDto.getDefinitionsList();
+        List<Integer> definitionIds = new ArrayList<>();
+        Set<Integer> userIds = new HashSet<>();
+        for(DefinitionDto definition:definitionsList){
+            definitionIds.add(definition.getId());
+            userIds.add(definition.getAuthorId());
+            userIds.add(definition.getCollectorId());
+        }
         Map<Integer,MeaningDto> meaningsResult = meaningDao.getMapByDefinitionIds(definitionIds,conn);
         Map<Integer,List<ExampleDto>> examplesResult = exampleDao.getMapWithListByDefinitionIds(definitionIds,conn);
         Map<Integer,List<TagDto>> tagsResult = tagDao.getMapWithListByDefinitionIds(definitionIds, conn);
-        //definitionから、userIdと
-        for(Integer definitionId: definitionIds){
-            DefinitionDto definition = definitionsMap.get(definitionId);
-      
+        for(DefinitionDto definition: definitionsList){
+            Integer definitionId = definition.getId();
             MeaningDto meaning = meaningsResult.get(definitionId);
             List<ExampleDto> examples = examplesResult.get(definitionId);
             List<TagDto> tags = tagsResult.get(definitionId);
