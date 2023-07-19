@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.security.auth.login.LoginException;
+
 import com.wordify.auth.dto.AuthorizeInfo;
 
 public class LoginDao {
-        public AuthorizeInfo login(String userNameString,Connection conn) throws SQLException{
+        public AuthorizeInfo login(String userNameString,Connection conn) throws SQLException,LoginException{
         StringBuilder builder = new StringBuilder("SELECT id,password FROM users WHERE username = ?");
         String password;
         int id;
@@ -20,7 +22,7 @@ public class LoginDao {
                 id = resultSet.getInt("id");
                 return new AuthorizeInfo(id,password);
             }
-            throw new SQLException("No user found on database.");//誰もヒットしなかったとき用
+            throw new LoginException("No user found on database.");//誰もヒットしなかったとき用
         }catch(SQLException e){
             throw new SQLException(e.getMessage());
         }

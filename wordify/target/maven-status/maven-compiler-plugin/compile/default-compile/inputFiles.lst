@@ -22,6 +22,7 @@ c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\config\ConnectionPool.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\config\JwtAuthenticationFilter.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\payloads\ISearchScopePayload.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\follows\FollowsDao.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\tagging\TaggingDaoImpl.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\CollectionController.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\context\ContextDao.java
@@ -43,7 +44,9 @@ c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\servlet\EntriesServlet.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\ContextDto.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\utils\SubqueryUtil.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\viewmodel\EntryDtoViewModel.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\tag\TagDao.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\UserBaseDto.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\EntriesController.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\DefinitionDto.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\service\entryService\EntryServiceImpl.java
@@ -51,6 +54,7 @@ c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\ExampleDto.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\payloads\IBasePayload.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\context\ContextDaoImpl.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\follows\FollowsDaoImpl.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\viewmodel\ContextDtoViewModel.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\payloads\params\ICustomParam.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\utils\SubqueryResult.java
@@ -58,12 +62,15 @@ c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\IDtoAndKeyMapper.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\definition\DefinitionDaoImpl.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\tag\TagMapper.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\user\UserDaoImpl.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\UserDetailDto.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\reference\ReferenceDaoImpl.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\AbstractController.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\service\definitionService\DefinitionService.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dto\payloads\EntryRegistrationPayload.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\controller\DefinitionController.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\word\WordDaoImpl.java
+c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\user\UserDao.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\dao\collection\CollectionDaoImpl.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\service\collectionService\CollectionService.java
 c:\workspace\project\project_dict\dict_api\wordify_api\wordify\src\main\java\com\wordify\api\servlet\EntriesContextServlet.java

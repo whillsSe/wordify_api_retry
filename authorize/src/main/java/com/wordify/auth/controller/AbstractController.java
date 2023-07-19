@@ -4,6 +4,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import javax.security.auth.login.LoginException;
+
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletResponse;
 
 public abstract class AbstractController {
@@ -22,7 +25,16 @@ public abstract class AbstractController {
         } catch (ExecutionException e) {
             // タスク内での例外
             //ExecutionExceptionは、Future.get()がthrowするエラーで、今回で言うtaskがthrowするエラーをラップしたもの。
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            Throwable cause = e.getCause();
+            if(cause instanceof LoginException){
+                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                resp.getWriter().write("unmatched parameters.");
+            }else if(cause instanceof JwtException){
+                resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                resp.getWriter().write("please re-login.");
+            }else{
+                resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
             resp.getWriter().write(e.getCause().toString());
             return;
         } catch (InterruptedException e) {

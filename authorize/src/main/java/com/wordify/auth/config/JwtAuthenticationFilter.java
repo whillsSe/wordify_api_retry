@@ -1,9 +1,5 @@
 package com.wordify.auth.config;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Properties;
-
 import com.wordify.auth.service.JwtTokenService;
 import com.wordify.auth.service.JwtTokenServiceImpl;
 

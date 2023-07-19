@@ -7,6 +7,8 @@ import javax.naming.NamingException;
 
 import com.wordify.auth.config.ConnectionPool;
 import com.wordify.auth.controller.LoginController;
+import com.wordify.auth.service.JwtTokenService;
+import com.wordify.auth.service.JwtTokenServiceImpl;
 import com.wordify.auth.service.LoginService;
 import com.wordify.auth.service.LoginServiceImpl;
 
@@ -23,8 +25,8 @@ public class LoginServlet extends HttpServlet{
         try{
             ExecutorService executor = (ExecutorService) getServletContext().getAttribute("executor");
             LoginService loginService = new LoginServiceImpl(ConnectionPool.getInstance());
-                //JWT発行インスタンスはどこで渡すかな
-            loginController = new LoginController(executor,loginService);
+            JwtTokenService jwtTokenService = new JwtTokenServiceImpl(ConnectionPool.getInstance());
+            loginController = new LoginController(executor,loginService,jwtTokenService);
         } catch (NamingException e) {
             e.printStackTrace();
         }
