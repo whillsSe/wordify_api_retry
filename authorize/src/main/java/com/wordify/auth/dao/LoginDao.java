@@ -6,12 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.security.auth.login.LoginException;
+import javax.security.sasl.AuthenticationException;
 
 import com.wordify.auth.dto.AuthorizeInfo;
+import com.wordify.auth.dto.InitializeInfo;
 
 public class LoginDao {
-        public AuthorizeInfo login(String userNameString,Connection conn) throws SQLException,LoginException{
-        StringBuilder builder = new StringBuilder("SELECT id,password FROM users WHERE username = ?");
+    public AuthorizeInfo login(String userNameString,Connection conn) throws SQLException,LoginException{
+        StringBuilder builder = new StringBuilder("SELECT id,password FROM user_auth WHERE username = ?");
         String password;
         int id;
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){

@@ -23,14 +23,15 @@ public class RefreshTokenDao {
             }
         }
     }
-    public void checkRefreshToken(String refreshToken,Connection conn) throws SQLException,MalformedJwtException{
-        StringBuilder builder = new StringBuilder("SELECT token FROM refresh_tokens WHERE token = ? AND is_valid = 1");
+    public int checkRefreshToken(String refreshToken,Connection conn) throws SQLException,MalformedJwtException{
+        StringBuilder builder = new StringBuilder("SELECT token,user_id FROM refresh_tokens WHERE token = ? AND is_valid = 1");
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
             pstmt.setString(1, refreshToken);
             ResultSet resultSet = pstmt.executeQuery();
             if(!resultSet.next()){
                 throw new MalformedJwtException("Token is invalid.");
             }
+            return resultSet.getInt("user_id");
         }
     }
     public void revokeRefreshToken(String refreshToken,Connection conn)throws SQLException{

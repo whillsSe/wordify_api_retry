@@ -1,0 +1,18 @@
+api:tomcat
+auth:tomcat
+db:mysql
+web_server:未定
+    reactでSPA構造で作ってしまう？
+
+・authからメールを送りたい
+    i)smtpメールサーバーの確保
+    ii)authの改変
+    iii)dbの設計変更
+
+・自宅サーバー環境はbeelinkのs12とかでいいかもしれない。
+    [買うもの]
+        ・換装用SSD
+        ・最低限のモニタ
+        ・usbキーボード
+    
+・

@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS `tags` (
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) UNSIGNED ZEROFILL NOT NULL,
   `username` varchar(20) NOT NULL,
+  `profile_name` varchar(50) NOT NULL,
+  `icon` varchar(50),
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),

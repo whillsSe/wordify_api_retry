@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.crypto.SecretKey;
 
 import com.wordify.auth.config.ConnectionPool;
+import com.wordify.auth.dao.ProfileDao;
 import com.wordify.auth.dao.RefreshTokenDao;
 import com.wordify.auth.dto.RefreshTokenInfo;
 
@@ -27,6 +28,7 @@ import io.jsonwebtoken.security.SignatureException;
 public class JwtTokenServiceImpl implements JwtTokenService{
     private ConnectionPool connectionPool;
     private RefreshTokenDao refreshTokenDao;
+    private ProfileDao profileDao;
     private static SecretKey SECRET_KEY;
     private static long EXPIRATION_TIME = 3600000;
     private static long REFRESH_EXPIRATION_TIME = 86400000;
@@ -41,6 +43,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         Properties prop = new Properties();
         ClassLoader classLoader = getClass().getClassLoader();
         this.refreshTokenDao = new RefreshTokenDao();
+        this.profileDao = new ProfileDao();
         try (InputStream input = classLoader.getResourceAsStream("config.properties")) {
             prop.load(input);
             SECRET_KEY = Keys.hmacShaKeyFor(prop.getProperty("jwt.key").getBytes(StandardCharsets.UTF_8));       
@@ -64,7 +67,22 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         refreshTokenDao.registerRefreshToken(new RefreshTokenInfo(refreshToken, userId, expirationMilliSec), conn);
         return refreshToken;
     }
-
+    @Override
+    public int checkRefreshToken(String refreshToken) throws SQLException,MalformedJwtException{
+        Connection conn = connectionPool.getConnection();
+        try{
+            int userId = Integer.parseInt(parseClaimsToken(refreshToken));
+            //さらに、DB上にこのtokenが存在しているかをチェック
+            refreshTokenDao.checkRefreshToken(refreshToken,conn);//判定をdaoに任せてしまってるので、本当はよくない。
+            return userId;
+        }catch(ExpiredJwtException e){
+            throw new JwtException("The refresh token has expired.",e);
+        }catch(SignatureException e){
+            throw new JwtException("The refresh token signature is invalid.",e);
+        }catch(MalformedJwtException e){
+            throw new JwtException("The refresh token is invalid.", e);
+        }
+    }
     @Override
     public String refreshAccessToken(String refreshToken) throws SQLException,JwtException {
         Connection conn = connectionPool.getConnection();
@@ -74,7 +92,8 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         try{
             int userId = Integer.parseInt(parseClaimsToken(refreshToken));
             //さらに、DB上にこのtokenが存在しているかをチェック
-            refreshTokenDao.checkRefreshToken(refreshToken, conn);
+            refreshTokenDao.checkRefreshToken(refreshToken,conn);//判定をdaoに任せてしまってるので、本当はよくない。
+                
             return createAccessToken(userId);
         }catch(ExpiredJwtException e){
             throw new JwtException("The refresh token has expired.",e);
@@ -97,4 +116,5 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         Jws<Claims> jwtClaims = jwtParser.parseClaimsJws(jwtToken);
         return jwtClaims.getBody().getSubject();
     }
+    
 }
