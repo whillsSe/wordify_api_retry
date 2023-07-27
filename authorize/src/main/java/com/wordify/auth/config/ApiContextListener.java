@@ -13,6 +13,7 @@ public class ApiContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ExecutorService executor = Executors.newFixedThreadPool(10);
         servletContextEvent.getServletContext().setAttribute("executor", executor);
+        System.out.println("Executor service initialized");
     }
 
     @Override

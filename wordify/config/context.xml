@@ -1,5 +1,4 @@
 <Context>
-<Connector port="8080" minSpareThreads="10" maxThreads="100" keepAliveSeconds="120">
 <Resource name="jdbc/MyLocalDB"
           auth="Container"
           type="javax.sql.DataSource"

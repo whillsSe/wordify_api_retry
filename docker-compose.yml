@@ -1,7 +1,7 @@
 version: '3'
 services:
   api_server:
-    build: ./wordify/
+    build: ./wordify
     ports:
       - "8080:8080"
     depends_on:
@@ -10,7 +10,7 @@ services:
       - network
 
   auth_server:
-    build: ./authorize/
+    build: ./authorize
     ports:
       - "8081:8081"
     depends_on:
@@ -18,12 +18,7 @@ services:
     networks:
       - network
 
-  web_server:
-    build: ./path_to_web_server_dockerfile_folder
-    ports:
-      - "80:80"
-    networks:
-      - network
+
 
   db:
     image: mysql:8.0

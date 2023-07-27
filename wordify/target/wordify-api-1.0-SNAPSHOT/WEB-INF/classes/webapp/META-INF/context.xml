@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context displayName="Sample DataSource" docBase="LoginTemplate"
+    path="/LoginTemplate" reloadable="true" >
+    <Resource    
+                name="jdbc/dict"
+                auth="Container"
+                type="javax.sql.DataSource"
+                username="root"
+                password="password"
+                driverClassName="com.mysql.jdbc.Driver"
+                url="jdbc:mysql://localhost:3306/dict"
+                maxWait="5000"
+                maxAcrive="10"
+                maxIdle="2"
+                validationQuery="SELECT * FROM ACCESS_COUNTER" />
+</Context>

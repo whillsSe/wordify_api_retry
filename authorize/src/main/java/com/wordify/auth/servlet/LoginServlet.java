@@ -2,6 +2,7 @@ package com.wordify.auth.servlet;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 import javax.naming.NamingException;
 
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet{
+    private static final Logger logger = Logger.getLogger(LoginServlet.class.getName());
     private LoginController loginController;
     @Override
     public void init(){
@@ -30,6 +32,7 @@ public class LoginServlet extends HttpServlet{
             JwtTokenService jwtTokenService = new JwtTokenServiceImpl(ConnectionPool.getInstance());
             ProfileService profileService = new ProfileServiceImpl(ConnectionPool.getInstance());
             loginController = new LoginController(executor,loginService,jwtTokenService,profileService);
+            logger.info("LoginServlet#init");
         } catch (NamingException e) {
             e.printStackTrace();
         }
@@ -37,6 +40,7 @@ public class LoginServlet extends HttpServlet{
     
     @Override
     public void doPost(HttpServletRequest req,HttpServletResponse res) throws IOException{
+        logger.info("LoginServlet#doPost");
         loginController.handlePostRequest(req, res);
     }
 }

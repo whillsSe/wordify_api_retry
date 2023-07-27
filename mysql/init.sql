@@ -145,3 +145,5 @@ REVOKE INSERT,DELETE ON wordify.users FROM 'api'@'%';
 REVOKE SELECT, INSERT, UPDATE, DELETE ON wordify.user_auth FROM 'api'@'%';
 REVOKE SELECT, INSERT, UPDATE, DELETE ON wordify.refresh_tokens FROM 'api'@'%';
 FLUSH PRIVILEGES;
+
+INSERT INTO user_auth(`username`,`password`) VALUES ("developper","5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8");
