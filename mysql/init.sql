@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS `refresh_tokens` (
   `token` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `expiration` datetime NOT NULL,
+  `is_valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -136,6 +137,7 @@ ALTER TABLE `users`
 CREATE USER 'auth'@'%' IDENTIFIED BY 'auth_password';
 GRANT SELECT, INSERT, UPDATE, DELETE ON wordify.user_auth TO 'auth'@'%';
 GRANT SELECT, INSERT, UPDATE, DELETE ON wordify.refresh_tokens TO 'auth'@'%';
+GRANT SELECT ON wordify.refresh_tokens TO 'auth'@'%';
 FLUSH PRIVILEGES;
 
 

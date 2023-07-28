@@ -6,6 +6,7 @@ c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dto\
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\JwtTokenService.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\JwtTokenServiceImpl.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\LoginServiceImpl.java
+c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\controllerUtils\ControllerUtils.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dao\LoginDao.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\ProfileService.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dto\RefreshTokenInfo.java
@@ -16,6 +17,7 @@ c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\serv
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\ProfileServiceImpl.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dao\RefreshTokenDao.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\AbstractController.java
+c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dto\AuthorizePrameter.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dao\ProfileDao.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\LoginController.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\config\ApiContextListener.java

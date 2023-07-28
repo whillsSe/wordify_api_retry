@@ -13,7 +13,7 @@ public class ConnectionPool {
 
     private ConnectionPool() throws NamingException {
         Context initialContext = new InitialContext();
-        dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/dict");
+        dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/wordify");
     }
 
     public static synchronized ConnectionPool getInstance() throws NamingException {

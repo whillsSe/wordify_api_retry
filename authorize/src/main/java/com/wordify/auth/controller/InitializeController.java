@@ -25,17 +25,20 @@ public class InitializeController extends AbstractController{
     public void handleGetRequest(HttpServletRequest req,HttpServletResponse res)throws IOException, java.io.IOException{
         Callable<String> task = () -> {
             Cookie[] cookies = req.getCookies();
-            for(Cookie cookie : cookies){
-                if(cookie.getName().equals("refreshToken")){
-                    String refreshToken = cookie.getValue();
-                    int userId = jwtTokenService.checkRefreshToken(refreshToken);
-                    String accessToken = jwtTokenService.createAccessToken(userId);
-                    InitializeInfo initializeInfo = profileService.getInitializeInfo(userId);
-                    res.addHeader("Authorization", "Bearer " + accessToken);
-                    ObjectMapper mapper = ObjectMapperSingleton.getInstance();
-                    return mapper.writeValueAsString(initializeInfo);
+            if(cookies != null) {
+                for(Cookie cookie : cookies){
+                    if(cookie.getName().equals("refreshToken")){
+                        String refreshToken = cookie.getValue();
+                        int userId = jwtTokenService.checkRefreshToken(refreshToken);
+                        String accessToken = jwtTokenService.createAccessToken(userId);
+                        InitializeInfo initializeInfo = profileService.getInitializeInfo(userId);
+                        res.addHeader("Authorization", "Bearer " + accessToken);
+                        ObjectMapper mapper = ObjectMapperSingleton.getInstance();
+                        return mapper.writeValueAsString(initializeInfo);
+                    }
                 }
             }
+            res.setStatus(401);
             throw new RuntimeException("refreshToken is not found");
         };
         super.handleAsyncRequest(task, res);

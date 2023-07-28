@@ -2,6 +2,7 @@ package com.wordify.auth.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import javax.security.auth.login.LoginException;
 
@@ -21,7 +22,10 @@ public class LoginServiceImpl implements LoginService{
         Connection conn = connectionPool.getConnection();
         AuthorizeInfo authorizeInfo = loginDao.login(userName, conn);
         String hashedPass = authorizeInfo.getHashedPassword();
-        if(hashedPass != Sha256Hash.getSha256Hash(password)){
+        Logger logger = Logger.getLogger(LoginServiceImpl.class.getName());
+        logger.info("hashedPass:"+hashedPass);
+        logger.info("password:"+Sha256Hash.getSha256Hash(password));
+        if(!hashedPass.equals(Sha256Hash.getSha256Hash(password))){
             throw new LoginException("Password unmatched!");//仮設
         };
         return authorizeInfo.getId();

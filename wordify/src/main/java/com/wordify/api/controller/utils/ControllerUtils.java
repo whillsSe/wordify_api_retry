@@ -54,7 +54,6 @@ public class ControllerUtils {
                 while((line = reader.readLine())!= null){
                     builder.append(line);
                 }
-                
             }
         return builder.toString();
     }

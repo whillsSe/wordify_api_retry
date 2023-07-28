@@ -2,6 +2,11 @@ version: '3'
 services:
   api_server:
     build: ./wordify
+    environment:
+      CATALINA_OPTS: -Dorg.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource
+      DB_HOST: db
+      DB_USER: api
+      DB_PASSWORD: api_password
     ports:
       - "8080:8080"
     depends_on:
@@ -11,6 +16,11 @@ services:
 
   auth_server:
     build: ./authorize
+    environment:
+      CATALINA_OPTS: -Dorg.apache.tomcat.util.digester.PROPERTY_SOURCE=org.apache.tomcat.util.digester.EnvironmentPropertySource
+      DB_HOST: db
+      DB_USER: auth
+      DB_PASSWORD: auth_password
     ports:
       - "8081:8081"
     depends_on:

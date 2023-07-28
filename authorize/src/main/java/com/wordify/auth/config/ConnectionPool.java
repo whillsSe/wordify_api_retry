@@ -4,8 +4,12 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import com.mysql.cj.x.protobuf.MysqlxNotice.Warning.Level;
+
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class ConnectionPool {
     private static ConnectionPool instance;
@@ -13,7 +17,7 @@ public class ConnectionPool {
 
     private ConnectionPool() throws NamingException {
         Context initialContext = new InitialContext();
-        dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/dict");
+        dataSource = (DataSource) initialContext.lookup("java:comp/env/jdbc/wordify");
     }
 
     public static synchronized ConnectionPool getInstance() throws NamingException {

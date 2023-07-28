@@ -1,8 +1,11 @@
 package com.wordify.auth.controller;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.security.auth.login.LoginException;
 
@@ -26,6 +29,8 @@ public abstract class AbstractController {
             // タスク内での例外
             //ExecutionExceptionは、Future.get()がthrowするエラーで、今回で言うtaskがthrowするエラーをラップしたもの。
             Throwable cause = e.getCause();
+                            Logger logger = Logger.getLogger(AbstractController.class.getName());
+                logger.info(cause.getMessage());
             if(cause instanceof LoginException){
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 resp.getWriter().write("unmatched parameters.");
