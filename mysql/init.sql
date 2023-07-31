@@ -36,11 +36,12 @@ CREATE TABLE IF NOT EXISTS `examples` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `meaning` (
-  `definition_id` int(11) UNSIGNED ZEROFILL NOT NULL,
+  `id` int(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `definition_id` int(11) UNSIGNED ZEROFILL NOT NULL ,
   `meaning` text DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`definition_id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `definition_id` (`definition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -137,6 +138,7 @@ ALTER TABLE `users`
 CREATE USER 'auth'@'%' IDENTIFIED BY 'auth_password';
 GRANT SELECT, INSERT, UPDATE, DELETE ON wordify.user_auth TO 'auth'@'%';
 GRANT SELECT, INSERT, UPDATE, DELETE ON wordify.refresh_tokens TO 'auth'@'%';
+GRANT SELECT ON wordify.users TO 'auth'@'%';
 GRANT SELECT ON wordify.refresh_tokens TO 'auth'@'%';
 FLUSH PRIVILEGES;
 

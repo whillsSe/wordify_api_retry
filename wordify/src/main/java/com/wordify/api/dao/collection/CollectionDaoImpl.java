@@ -10,19 +10,19 @@ public class CollectionDaoImpl implements CollectionDao{
 
     @Override
     public void addDefinition(CollectionTargetPayload query, Connection conn) throws SQLException {
-        StringBuilder builder = new StringBuilder("INSERT INTO collection(definition_id,user_id) VALUES(?,?)");
+        StringBuilder builder = new StringBuilder("INSERT INTO collections(definition_id,collector_id) VALUES(?,?)");
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
-            pstmt.setInt(0, query.getDefinitionId());
-            pstmt.setInt(1, query.getUserId());
+            pstmt.setInt(1, query.getDefinitionId());
+            pstmt.setInt(2, query.getUserId());
             pstmt.executeUpdate();
         }
         
     }
     public void removeDefinition(CollectionTargetPayload query,Connection conn) throws SQLException{
-        StringBuilder builder = new StringBuilder("DELETE FROM collection WHERE definition_id = ? AND user_id = ?");
+        StringBuilder builder = new StringBuilder("DELETE FROM collections WHERE definition_id = ? AND collector_id = ?");
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
-            pstmt.setInt(0,query.getDefinitionId());
-            pstmt.setInt(1, query.getUserId());
+            pstmt.setInt(1,query.getDefinitionId());
+            pstmt.setInt(2, query.getUserId());
             pstmt.executeQuery();
         }
     }

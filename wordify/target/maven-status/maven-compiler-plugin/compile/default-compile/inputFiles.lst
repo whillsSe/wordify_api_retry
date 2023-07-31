@@ -74,3 +74,4 @@ c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\ent
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\phonetic\PhoneticDao.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\service\collectionService\CollectionServiceImpl.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\service\definitionService\DefinitionServiceImpl.java
+c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\config\CorsFilter.java

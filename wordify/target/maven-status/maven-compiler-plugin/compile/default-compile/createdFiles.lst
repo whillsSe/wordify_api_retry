@@ -60,6 +60,7 @@ com\wordify\api\dto\payloads\IBasePayload.class
 com\wordify\api\servlet\EntriesContextServlet.class
 com\wordify\api\dao\collection\CollectionDao.class
 com\wordify\api\dao\example\ExampleDaoImpl.class
+com\wordify\api\config\CorsFilter.class
 com\wordify\api\dto\payloads\ISearchScopePayload.class
 com\wordify\api\dto\payloads\CollectionTargetPayload.class
 com\wordify\api\dao\entry\EntryMapper.class

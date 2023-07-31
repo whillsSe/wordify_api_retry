@@ -12,10 +12,10 @@ public class TaggingDaoImpl implements TaggingDao{
         }
         builder.deleteCharAt(builder.length() - 1);
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
-            int n=1;
-            for(int tagId : tagIds){
-                pstmt.setInt(n++,definitionId);
-                pstmt.setInt(n++, tagId);
+            for(int i=0;i<tagIds.length;i++){
+                int tagId = tagIds[i];
+                pstmt.setInt(i*2+1,definitionId);
+                pstmt.setInt(i*2+2, tagId);
             }
             pstmt.executeUpdate();
         }catch(SQLException e){

@@ -35,7 +35,7 @@ public class ExampleDaoImpl implements ExampleDao{
     @Override
     public int[] registerExample(int definitionId,String[] exampleStrings,Connection conn)throws SQLException{
       int[] exampleIds = new int[exampleStrings.length];
-      StringBuilder builder = new StringBuilder("INSERT INTO tagging (definition_id,tag_id) VALUES");
+      StringBuilder builder = new StringBuilder("INSERT INTO examples (definition_id,example) VALUES");
       for(int i=0;i<exampleStrings.length;i++){
           builder.append("(?,?),");
       }
@@ -43,11 +43,11 @@ public class ExampleDaoImpl implements ExampleDao{
       try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(), Statement.RETURN_GENERATED_KEYS)){
         for (int i=0;i<exampleStrings.length;i++) {
             String exampleString = exampleStrings[i];
-            pstmt.setInt(1, definitionId);
-            pstmt.setString(2, exampleString);
+            pstmt.setInt(i*2+1, definitionId);
+            pstmt.setString(i*2+2, exampleString);
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("Creating tag failed, no rows affected.");
+                throw new SQLException("Creating examples failed, no rows affected.");
             }
     
             try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){

@@ -39,10 +39,11 @@ public class MeaningDaoImpl implements MeaningDao{
 
     @Override
     public int registerMeaning(int definitionId,String meaninString,Connection conn)throws SQLException{
-      StringBuilder builder = new StringBuilder("INSERT INTO meanings(definition_id,meaning) VALUES(?,?)");
+      StringBuilder builder = new StringBuilder("INSERT INTO meaning(definition_id,meaning) VALUES(?,?)");
       try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(),Statement.RETURN_GENERATED_KEYS)){
         pstmt.setInt(1,definitionId);
         pstmt.setString(2, meaninString);
+        pstmt.executeUpdate();
         try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
           if(generatedKeys.next()){
             int id = generatedKeys.getInt(1);

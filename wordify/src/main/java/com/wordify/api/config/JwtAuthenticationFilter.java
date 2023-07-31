@@ -3,6 +3,9 @@ package com.wordify.api.config;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.logging.Logger;
+
+
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -13,6 +16,7 @@ import io.jsonwebtoken.io.IOException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -20,10 +24,10 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebFilter("/*")  
+@WebFilter(filterName = "JwtAuthentication" ,urlPatterns =  "/*")  
 public class JwtAuthenticationFilter implements Filter {
     private JwtParser jwtParser;  
-    public void init(){
+    public void init(FilterConfig filterConfig){
         Properties prop = new Properties();
         ClassLoader classLoader = getClass().getClassLoader();
         try (InputStream input = classLoader.getResourceAsStream("config.properties")) {
@@ -38,6 +42,8 @@ public class JwtAuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException, java.io.IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authHeader = httpRequest.getHeader("Authorization");
+        Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
+        logger.info("authHeader: " + authHeader);
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwtToken = authHeader.substring(7);
             try {
@@ -47,7 +53,7 @@ public class JwtAuthenticationFilter implements Filter {
                 httpRequest.setAttribute("user", Integer.parseInt(jwsClaims.getBody().getSubject()));
                 chain.doFilter(request, response);
             } catch (JwtException e) {
-                // トークンの検証が失敗したら、エラーレスポンスを送ります。
+                    // トークンの検証が失敗したら、エラーレスポンスを送ります。
                 ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     //((HttpServletResponse) response).setContentType("text/plain");
                 response.getWriter().write("Invalid JWT token");
@@ -59,4 +65,5 @@ public class JwtAuthenticationFilter implements Filter {
             response.getWriter().write("Missing Authorization header");
         }
     }
+    public void destroy() {}
 }

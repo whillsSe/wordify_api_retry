@@ -15,7 +15,7 @@ public class EntryRegistrationPayload {
     @Valid
     private String[] tagStrings;
     @Size(min=0,max=400)
-    private String MeaningString;
+    private String meaningString;
     @Size(min=0,max=100)
     @Valid
     private String[] exampleString;
@@ -39,10 +39,10 @@ public class EntryRegistrationPayload {
         this.tagStrings = tagStrings;
     }
     public String getMeaningString() {
-        return MeaningString;
+        return meaningString;
     }
     public void setMeaningString(String meaningString) {
-        MeaningString = meaningString;
+        this.meaningString = meaningString;
     }
     public String[] getExampleStrings() {
         return exampleString;

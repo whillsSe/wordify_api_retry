@@ -35,10 +35,10 @@ public class DaoUtils {
         }
         return params;
     }
-    public static StringBuilder createStringBuilder(String tableName){
-        String columnName = tableName + "s";
+    public static StringBuilder createStringBuilder(String columnName){
+        String tableName = columnName + "s";
         StringBuilder builder = new StringBuilder("INSERT INTO ");
-        builder.append(tableName).append("(").append(columnName).append(") VALUES (?) ON DUPULICATE KEY UPDATE id=LAST_INSERT_ID(id),").append(columnName).append("=VALUES(").append(columnName).append("s)");
+        builder.append(tableName).append("(").append(columnName).append(") VALUES (?) ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id),").append(columnName).append("=VALUES(").append(columnName).append(")");
         return builder;
     }
 }

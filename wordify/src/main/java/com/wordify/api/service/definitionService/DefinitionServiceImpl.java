@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
@@ -51,13 +52,16 @@ public class DefinitionServiceImpl implements DefinitionService{
         this.collectionDao = new CollectionDaoImpl(); 
         this.taggingDao = new TaggingDaoImpl();
     }
-    public DefinitionDtoWithEntryInfo registerDefinition(EntryRegistrationPayload payload)throws SQLException{
+    public DefinitionDtoWithEntryInfo registerDefinition(EntryRegistrationPayload payload) throws SQLException{
+        Connection conn = connectionPool.getConnection();
+        DefinitionDtoWithEntryInfo dto = new DefinitionDtoWithEntryInfo();
+        Logger logger = Logger.getLogger(DefinitionServiceImpl.class.getName());
+        try{
         //word,phonetic,tagを呼び出します
         //それぞれを検証・登録します。主キーidを取得します。
         //definitionを登録します。主キーidを取得します。
         //上記idと合わせ、meaning,example,definitions_tags,collectionsを登録します。
         //commitします。
-        Connection conn = connectionPool.getConnection();
         conn.setAutoCommit(false);
         //BaseEntityDtoを渡して、BaseEntityDtoを返すべきでは？
         String wordString = payload.getWordString();
@@ -83,20 +87,28 @@ public class DefinitionServiceImpl implements DefinitionService{
         int meaningId = meaningDao.registerMeaning(definitionId,meaninString,conn);
         MeaningDto meaningDto = new MeaningDto(meaningId, meaninString);
 
+        logger.info("passed meaningDao.registerMeaning");
+
         String[] exampleStrings = payload.getExampleStrings();
         int[] exampleIds = exampleDao.registerExample(definitionId,exampleStrings,conn);
+
+        logger.info("passed exampleDao.registerExample");
+
         List<ExampleDto> examples = new ArrayList<>();
         for(int i=0;i<exampleStrings.length;i++){
             examples.add(new ExampleDto(exampleIds[i],exampleStrings[i]));
         }
 
+        logger.info("passed examples.add");
+
         taggingDao.addTagging(definitionId,tagIds,conn);
         CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
         collectionDao.addDefinition(collectionPayload,conn);
 
+        logger.info("passed taggingDao.addTagging");
+
         conn.commit();
 
-        DefinitionDtoWithEntryInfo dto = new DefinitionDtoWithEntryInfo();
         dto.setId(definitionId);
         dto.setAuthorId(userId);
         dto.setWord(wordDto);
@@ -105,7 +117,23 @@ public class DefinitionServiceImpl implements DefinitionService{
         dto.setExamples(examples);
         dto.setTags(tags);
 
+    }catch(SQLException e){
+        logger.info(e.getMessage() + e.getLocalizedMessage());
+        rollbackTransaction(conn);
+    }
         return dto;
+    }
+    private void rollbackTransaction(Connection conn) throws SQLException {
+        if (conn != null) {
+            try {
+                conn.rollback();
+                throw new SQLException("Transaction rolled back");
+            } catch (SQLException e) {
+                Logger logger = Logger.getLogger(DefinitionServiceImpl.class.getName());
+                logger.info("Failed to rollback transaction: " + e.getMessage());
+                throw new SQLException("Failed to rollback transaction: " + e.getMessage());
+            }
+        }
     }
 /* 
     public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){
