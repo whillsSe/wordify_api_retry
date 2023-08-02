@@ -23,6 +23,7 @@ public abstract class AbstractController {
         } catch (ExecutionException e) {
             // タスク内での例外
             //ExecutionExceptionは、Future.get()がthrowするエラーで、今回で言うtaskがthrowするエラーをラップしたもの。
+            e.printStackTrace();
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(e.getCause().toString());
             return;

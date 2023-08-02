@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.context.ContextDao;
@@ -57,8 +58,11 @@ public class EntryServiceImpl implements EntryService{
 
     @Override
     public ContextDto getContext(ContextRetrievalPayload query) throws SQLException{
+        Logger logger = Logger.getLogger(ContextDto.class.getName());
         try (Connection conn = connectionPool.getConnection()){
         ContextDto contextDto = contextDao.getContext(query, conn);
+        logger.info("Is ContextDto null ?" + (contextDto == null));//false
+                    //ここがnullだったときに、次が進まなくなってしまう問題。
         List<DefinitionDto> definitionsList = contextDto.getDefinitionsList();
         List<Integer> definitionIds = new ArrayList<>();
         Set<Integer> userIds = new HashSet<>();

@@ -22,7 +22,7 @@ public class MeaningDaoImpl implements MeaningDao{
   }
 
     public Map<Integer,MeaningDto> getMapByDefinitionIds(List<Integer> list,Connection conn){
-      StringBuilder builder = new StringBuilder("SELECT definition_id,id,meaning FROM meanings WHERE definition_id IN (");
+      StringBuilder builder = new StringBuilder("SELECT definition_id,id,meaning FROM meaning WHERE definition_id IN (");
       SQLUtils.prepareQueryForElements(list.size(), builder);
       builder.append(")");
 
@@ -33,6 +33,7 @@ public class MeaningDaoImpl implements MeaningDao{
         ResultSet resultSet = pstmt.executeQuery();
         return mapper.mapToMap(resultSet);
       }catch(SQLException e){
+        e.printStackTrace();
         throw new Error("SQLException has happened!");
       }
     }

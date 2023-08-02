@@ -3,6 +3,8 @@ package com.wordify.api.controller.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+import org.jboss.logging.Logger;
+
 import com.wordify.api.dto.payloads.ContextRetrievalPayload;
 import com.wordify.api.dto.payloads.EntrySearchPayload;
 import com.wordify.api.dto.payloads.ISearchScopePayload;
@@ -11,11 +13,20 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class ControllerUtils {
     private static String[] getPathParts(HttpServletRequest req){
+        //String pathInfo = req.getPathInfo();
+        //String[] pathArr = pathInfo.split("/");
+
+        //Logger logger = Logger.getLogger(ControllerUtils.class.getName());
+        //logger.info(req.getPathInfo());//"/self"
+        //logger.info(pathArr[0]);//""
+        //logger.info(pathArr[1]);//"self"
         return req.getPathInfo().split("/");
     }
     private static void getScopeInfo(String[] pathParts,ISearchScopePayload query){
-        String scope = pathParts[0];
-        if(scope != "self" && scope != "follows"){
+        String scope = pathParts[1];
+        //Logger logger = Logger.getLogger(ControllerUtils.class.getName());
+        //logger.info(scope);
+        if(!scope.equals("self") && !scope.equals("follows")){
             Integer scopeId = Integer.parseInt(pathParts[1]);
             query.setScopeId(scopeId);
         }
@@ -33,18 +44,9 @@ public class ControllerUtils {
         String[] pathParts = getPathParts(req);
         ContextRetrievalPayload query = new ContextRetrievalPayload(userId);
         getScopeInfo(pathParts, query);
-        getContextInfo(pathParts, query);
+        query.setWordId(Integer.parseInt(req.getParameter("wId")));
+        query.setPhoneticId(Integer.parseInt(req.getParameter("pId")));
         return query;
-    }
-    private static void getContextInfo(String[] pathParts,ContextRetrievalPayload query){
-        int marker = 0;
-        if(pathParts[1] == "context"){
-            marker = 2;
-        }else if(pathParts[2] == "context"){
-            marker = 3;
-        }
-        query.setPhoneticId(Integer.parseInt(pathParts[marker]));
-        query.setWordId(Integer.parseInt(pathParts[marker+1]));
     }
 
     public static String readRequestBody(HttpServletRequest req) throws IOException{

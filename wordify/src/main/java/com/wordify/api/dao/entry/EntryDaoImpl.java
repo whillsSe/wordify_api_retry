@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dto.EntryDto;
@@ -24,8 +25,10 @@ public class EntryDaoImpl implements EntryDao{
         SubqueryResult subqueryResult = SubqueryUtil.createSubquery(query);
         SubqueryResult whereClauseResult = SubqueryUtil.createEntryWhereClause(query);
         StringBuilder builder = new StringBuilder("SELECT word,w.id AS wordId,phonetic,p.id AS phoneticId FROM definitions d JOIN (");
-        builder.append(subqueryResult.getQuery()).append(") AS scope ON d.id = scope.definition_id JOIN word w ON d.word_id = w.id JOIN phonetic p ON d.phonetic_id = p.id");
+        builder.append(subqueryResult.getQuery()).append(") AS scope ON d.id = scope.definition_id JOIN words w ON d.word_id = w.id JOIN phonetics p ON d.phonetic_id = p.id");
         builder.append(whereClauseResult.getQuery());
+        Logger logger = Logger.getLogger(EntryDaoImpl.class.getName());
+        logger.info(builder.toString());
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
             int count = 0;
             DaoUtils.setParameters(pstmt,subqueryResult.getParameter(),count);

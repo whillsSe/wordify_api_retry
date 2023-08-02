@@ -16,7 +16,7 @@ public class SubqueryUtil {
         List<ICustomParam> parameter = new ArrayList<>();
         switch(scope.getScope()){
             case "self":
-                builder.append("collection c WHERE collector_id = ?");
+                builder.append("collections c WHERE collector_id = ?");
                 parameter.add(new IntParam(scope.getUserId()));
             break;
             case "follows":
@@ -73,6 +73,9 @@ public class SubqueryUtil {
                 params.add(new StringParam(tag));
             }
         }
+          if(count != 0) builder.append(" AND ");
+          builder.append("1=1");
+          params.add(new IntParam(query.getUserId()));
         return new SubqueryResult(builder.toString(),params); 
     }
 }

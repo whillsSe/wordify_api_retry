@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
@@ -22,15 +23,18 @@ public class TagDaoImpl implements TagDao{
     //definitionIdsからtagを取得するならDao分けてても良いけども、逆の場合は一時的に保持するレコード。
     //一旦いつも通りの実装をする(definitionからテーブル結合して直に取得)
     public Map<Integer,List<TagDto>> getMapWithListByDefinitionIds(List<Integer> list,Connection conn){
-        StringBuilder builder = new StringBuilder("SELECT definition_id,tag_id,tag FROM definitions_tags dt JOIN tag t ON dt.tag_id = t.id WHERE definition_id IN (");
+        StringBuilder builder = new StringBuilder("SELECT definition_id,tag_id,tag,t.id FROM tagging dt JOIN tags t ON dt.tag_id = t.id WHERE definition_id IN (");
         SQLUtils.prepareQueryForElements(list.size(), builder);
         builder.append(")");
         List<ICustomParam> params = DaoUtils.parseIntegerToICustomParams(list);
+        Logger logger = Logger.getLogger(TagDaoImpl.class.getName());
+        logger.info(builder.toString());
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
           DaoUtils.setParameters(pstmt, params, 0);
           ResultSet resultSet = pstmt.executeQuery();
           return mapper.mapToMapWithList(resultSet);
         }catch(SQLException e){
+            e.printStackTrace();
           throw new Error("SQLException has happened!");
         }
       }

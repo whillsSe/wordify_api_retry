@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.api.controller.utils.ControllerUtils;
 import com.wordify.api.controller.viewmodel.ContextDtoViewModel;
@@ -38,8 +39,12 @@ public class EntriesController extends AbstractController{
                 query.setTagsStrings(Arrays.asList(tags.split(",")));
             }
             list = service.getEntries(query);
+            List<EntryDtoViewModel> viewModels = new ArrayList<EntryDtoViewModel>();
+            for(EntryDto dto :list){
+                viewModels.add(convertEntryDtoToViewModel(dto));
+            }
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();
-            String json = mapper.writeValueAsString(list);
+            String json = mapper.writeValueAsString(viewModels);
             return json;
         };
         super.handleAsyncRequest(task, resp);
@@ -51,6 +56,7 @@ public class EntriesController extends AbstractController{
 
             ContextDto dto = service.getContext(query);
             ObjectMapper mapper = ObjectMapperSingleton.getInstance();
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = mapper.writeValueAsString(convertContextDtoToViewModel(dto));
             return json;
         };
@@ -58,11 +64,11 @@ public class EntriesController extends AbstractController{
     }
     private ContextDtoViewModel convertContextDtoToViewModel(ContextDto dto){
         ContextDtoViewModel viewModel = new ContextDtoViewModel();
-        EntryDtoViewModel prev = convertEntryDtoToViewModel(dto.getPrevEntry());
-        EntryDtoViewModel next = convertEntryDtoToViewModel(dto.getNextEntry());
         viewModel.setDefinitions(dto.getDefinitionsList());
-        viewModel.setPrev(prev);
-        viewModel.setNext(next);
+            EntryDtoViewModel prev = convertEntryDtoToViewModel(dto.getPrevEntry());
+            viewModel.setPrev(prev);
+            EntryDtoViewModel next = convertEntryDtoToViewModel(dto.getNextEntry());
+            viewModel.setNext(next);
         return viewModel;
     }
     private EntryDtoViewModel convertEntryDtoToViewModel(EntryDto dto){

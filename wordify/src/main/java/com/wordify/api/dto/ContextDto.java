@@ -7,8 +7,8 @@ public class ContextDto {
     EntryDto nextEntry;
     List<DefinitionDto> definitionsList;//Mapにしてるけど、definitionの表示に優先順位をつけるならちょっと考えないといけない
     public ContextDto(EntryDto prevEntry, EntryDto nextEntry, List<DefinitionDto> definitionsList) {
-        this.prevEntry = prevEntry;
-        this.nextEntry = nextEntry;
+        if(prevEntry != null) this.prevEntry = prevEntry;
+        if(nextEntry != null) this.nextEntry = nextEntry;
         this.definitionsList = definitionsList;
     }
     public EntryDto getPrevEntry() {

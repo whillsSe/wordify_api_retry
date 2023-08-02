@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.wordify.api.dao.DaoUtils;
 import com.wordify.api.dao.GenericMapper;
@@ -20,15 +21,19 @@ public class ExampleDaoImpl implements ExampleDao{
         this.mapper = new GenericMapper<ExampleDto>(new ExampleMapper());
     }
     public Map<Integer,List<ExampleDto>> getMapWithListByDefinitionIds(List<Integer> list,Connection conn){
+        Logger logger = Logger.getLogger(ExampleDaoImpl.class.getName());
+
         StringBuilder builder = new StringBuilder("SELECT definition_id,id,example FROM examples WHERE definition_id IN (");
         SQLUtils.prepareQueryForElements(list.size(), builder);
         builder.append(")");
         List<ICustomParam> params = DaoUtils.parseIntegerToICustomParams(list);
+        logger.info(builder.toString());
       try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
         DaoUtils.setParameters(pstmt, params, 0);
         ResultSet resultSet = pstmt.executeQuery();
         return mapper.mapToMapWithList(resultSet);
       }catch(SQLException e){
+        e.printStackTrace();
         throw new Error("SQLException has happened!");
       }
     }

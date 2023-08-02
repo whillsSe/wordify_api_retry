@@ -41,6 +41,11 @@ public class JwtAuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException, java.io.IOException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
+            chain.doFilter(request, response);
+            return;
+        }
         String authHeader = httpRequest.getHeader("Authorization");
         Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
         logger.info("authHeader: " + authHeader);

@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/entries/*/context")
+@WebServlet("/entries/context/*")
 public class EntriesContextServlet extends HttpServlet{
     private EntriesController entriesController;
     @Override
