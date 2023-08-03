@@ -58,6 +58,12 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         return Jwts.builder().setSubject(Integer.toString(userId)).setIssuedAt(now).setExpiration(expiration).signWith(SECRET_KEY,SignatureAlgorithm.HS256).compact();
     }
     @Override
+    public String createExpiredAccessToken(int userId){
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() - EXPIRATION_TIME);
+        return Jwts.builder().setSubject(Integer.toString(userId)).setIssuedAt(now).setExpiration(expiration).signWith(SECRET_KEY,SignatureAlgorithm.HS256).compact();
+    }
+    @Override
     public String createRefreshToken(int userId) throws SQLException{
         //refresh_tokensでは、有効・無効の判断を行うカラム・有効期限を登録する。
         Connection conn = connectionPool.getConnection();
@@ -116,5 +122,4 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         Jws<Claims> jwtClaims = jwtParser.parseClaimsJws(jwtToken);
         return jwtClaims.getBody().getSubject();
     }
-    
 }

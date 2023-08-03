@@ -11,4 +11,5 @@ public interface JwtTokenService {
     public String refreshAccessToken(String refreshToken)throws SQLException;
     public void revokeRefreshToken(String refreshToken)throws SQLException;
     public String parseClaimsToken(String jwtToken);
+    public String createExpiredAccessToken(int i);
 }

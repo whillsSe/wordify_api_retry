@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
@@ -57,11 +58,14 @@ public class JwtAuthenticationFilter implements Filter {
                 // JWTトークンの検証が成功したら、クレームからユーザー情報を取り出し、リクエストの属性に設定します。
                 httpRequest.setAttribute("user", Integer.parseInt(jwsClaims.getBody().getSubject()));
                 chain.doFilter(request, response);
+            }catch (ExpiredJwtException e) {
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpResponse.setContentType("application/json");
+                httpResponse.getWriter().write("{\"error\":\"TOKEN_EXPIRED\",\"message\":\"Expired JWT token\"}");
             } catch (JwtException e) {
-                    // トークンの検証が失敗したら、エラーレスポンスを送ります。
-                ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    //((HttpServletResponse) response).setContentType("text/plain");
-                response.getWriter().write("Invalid JWT token");
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpResponse.setContentType("application/json");
+                httpResponse.getWriter().write("{\"error\":\"INVALID_TOKEN\",\"message\":\"Invalid JWT token\"}");
             }
         } else {
             // JWTトークンがヘッダーに含まれていない場合も、エラーレスポンスを送ります。

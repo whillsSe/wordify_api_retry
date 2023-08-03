@@ -48,6 +48,6 @@ public abstract class AbstractController {
             resp.getWriter().write("Task was interrupted");
             return;
         }
-        resp.getWriter().write(json); // レスポンスに書き込む
+        if(json != null) resp.getWriter().write(json); // レスポンスに書き込む
     }
 }

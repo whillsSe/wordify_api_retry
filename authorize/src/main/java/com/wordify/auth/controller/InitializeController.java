@@ -2,6 +2,7 @@ package com.wordify.auth.controller;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordify.auth.dto.InitializeInfo;
@@ -24,16 +25,18 @@ public class InitializeController extends AbstractController{
     }
     public void handleGetRequest(HttpServletRequest req,HttpServletResponse res)throws IOException, java.io.IOException{
         Callable<String> task = () -> {
+            Logger logger = Logger.getLogger(InitializeController.class.getName());
+            logger.info(jwtTokenService.createExpiredAccessToken(1));
             Cookie[] cookies = req.getCookies();
             if(cookies != null) {
                 for(Cookie cookie : cookies){
                     if(cookie.getName().equals("refreshToken")){
-                        String refreshToken = cookie.getValue();
-                        int userId = jwtTokenService.checkRefreshToken(refreshToken);
-                        String accessToken = jwtTokenService.createAccessToken(userId);
-                        InitializeInfo initializeInfo = profileService.getInitializeInfo(userId);
-                        res.addHeader("Authorization", "Bearer " + accessToken);
-                        ObjectMapper mapper = ObjectMapperSingleton.getInstance();
+                            String refreshToken = cookie.getValue();
+                            int userId = jwtTokenService.checkRefreshToken(refreshToken);
+                            String accessToken = jwtTokenService.createAccessToken(userId);
+                            InitializeInfo initializeInfo = profileService.getInitializeInfo(userId);
+                            res.addHeader("Authorization", "Bearer " + accessToken);
+                            ObjectMapper mapper = ObjectMapperSingleton.getInstance();
                         return mapper.writeValueAsString(initializeInfo);
                     }
                 }
