@@ -31,12 +31,12 @@ public class EntryDaoImpl implements EntryDao{
         logger.info(builder.toString());
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
             int count = 0;
-            DaoUtils.setParameters(pstmt,subqueryResult.getParameter(),count);
+            count = DaoUtils.setParameters(pstmt,subqueryResult.getParameter(),count);
             DaoUtils.setParameters(pstmt,whereClauseResult.getParameter(),count);
             ResultSet resultSet = pstmt.executeQuery();
             return mapper.mapToList(resultSet);
         }catch(SQLException e){
-            e.getErrorCode();
+            e.printStackTrace();
             throw new Error("SQLException is happened!");
         }
     }
