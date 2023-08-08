@@ -10,4 +10,5 @@ import com.wordify.api.dto.ExampleDto;
 public interface ExampleDao {
     public Map<Integer,List<ExampleDto>> getMapWithListByDefinitionIds(List<Integer> list,Connection conn);
     public int[] registerExample(int definitionId,String[] exampleStrings,Connection conn)throws SQLException;
+    public void deleteExample(int definitionId,Connection conn) throws SQLException;
 }

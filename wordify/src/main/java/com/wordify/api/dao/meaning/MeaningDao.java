@@ -10,4 +10,5 @@ import com.wordify.api.dto.MeaningDto;
 public interface MeaningDao {
     public Map<Integer,MeaningDto> getMapByDefinitionIds(List<Integer> list,Connection conn);
     public int registerMeaning(int definitionId,String meaninString,Connection conn)throws SQLException;
+    public void deleteMeaning(int definitionId,Connection conn) throws SQLException;
 }

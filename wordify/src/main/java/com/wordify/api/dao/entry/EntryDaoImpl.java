@@ -32,7 +32,9 @@ public class EntryDaoImpl implements EntryDao{
         try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
             int count = 0;
             count = DaoUtils.setParameters(pstmt,subqueryResult.getParameter(),count);
-            DaoUtils.setParameters(pstmt,whereClauseResult.getParameter(),count);
+            if(whereClauseResult.getParameter().size() != 0){
+                DaoUtils.setParameters(pstmt,whereClauseResult.getParameter(),count);
+            }
             ResultSet resultSet = pstmt.executeQuery();
             return mapper.mapToList(resultSet);
         }catch(SQLException e){

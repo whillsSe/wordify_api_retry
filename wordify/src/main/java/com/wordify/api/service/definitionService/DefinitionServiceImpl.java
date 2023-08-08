@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
 import com.wordify.api.dao.collection.CollectionDaoImpl;
@@ -30,6 +31,7 @@ import com.wordify.api.dto.MeaningDto;
 import com.wordify.api.dto.TagDto;
 import com.wordify.api.dto.payloads.CollectionTargetPayload;
 import com.wordify.api.dto.payloads.EntryRegistrationPayload;
+import com.wordify.api.dto.payloads.EntryUpdatePayload;
 
 public class DefinitionServiceImpl implements DefinitionService{
     private ConnectionPool connectionPool;
@@ -57,22 +59,19 @@ public class DefinitionServiceImpl implements DefinitionService{
         DefinitionDtoWithEntryInfo dto = new DefinitionDtoWithEntryInfo();
         Logger logger = Logger.getLogger(DefinitionServiceImpl.class.getName());
         try{
-        //word,phonetic,tagを呼び出します
-        //それぞれを検証・登録します。主キーidを取得します。
-        //definitionを登録します。主キーidを取得します。
-        //上記idと合わせ、meaning,example,definitions_tags,collectionsを登録します。
-        //commitします。
+            //word,phonetic,tagを呼び出します
+            //それぞれを検証・登録します。主キーidを取得します。
+            //definitionを登録します。主キーidを取得します。
+            //上記idと合わせ、meaning,example,definitions_tags,collectionsを登録します。
+            //commitします。
         conn.setAutoCommit(false);
-        //BaseEntityDtoを渡して、BaseEntityDtoを返すべきでは？
+            //BaseEntityDtoを渡して、BaseEntityDtoを返すべきでは？
         String wordString = payload.getWordString();
-        int wordId = wordDao.retrieveOrCreate(wordString, conn);
-        BaseEntityDto wordDto = new BaseEntityDto(wordId, wordString);
-
-        //メモ：取得との統一感としても、引数Objで渡す⇒欲しいdtoで返す方が統一感があった気がする。
-            //追記：どんなdto型で返すかが不透明だし、dtoで返すとidとか毎回getで呼び出して埋め込んで…と煩雑。
+        BaseEntityDto wordDto = retrieveOrCreateWord(wordString, conn);
+            //メモ：取得との統一感としても、引数Objで渡す⇒欲しいdtoで返す方が統一感があった気がする。
+            
         String phoneticString = payload.getPhoneticString();
-        int phoneticId = phoneticDao.retrieveOrCreate(phoneticString, conn);
-        BaseEntityDto phoneticDto = new BaseEntityDto(phoneticId, phoneticString);
+        BaseEntityDto phoneticDto = retrieveOrCreatePhonetic(phoneticString, conn);
 
         String[] tagStrings = payload.getTagStrings();
         int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
@@ -80,32 +79,19 @@ public class DefinitionServiceImpl implements DefinitionService{
         for(int i=0;i<tagStrings.length;i++){
             tags.add(new TagDto(tagIds[i],tagStrings[i]));
         }
+
         int userId = payload.getUserId();
-        int definitionId = definitionDao.registerDefinition(userId,wordId,phoneticId,conn);
+        int definitionId = definitionDao.registerDefinition(userId,wordDto.getId(),phoneticDto.getId(),conn);
 
-        String meaninString = payload.getMeaningString();
-        int meaningId = meaningDao.registerMeaning(definitionId,meaninString,conn);
-        MeaningDto meaningDto = new MeaningDto(meaningId, meaninString);
-
-        logger.info("passed meaningDao.registerMeaning");
+        String meaningString = payload.getMeaningString();
+        MeaningDto meaningDto = registerMeaning(definitionId, meaningString, conn);
 
         String[] exampleStrings = payload.getExampleStrings();
-        int[] exampleIds = exampleDao.registerExample(definitionId,exampleStrings,conn);
-
-        logger.info("passed exampleDao.registerExample");
-
-        List<ExampleDto> examples = new ArrayList<>();
-        for(int i=0;i<exampleStrings.length;i++){
-            examples.add(new ExampleDto(exampleIds[i],exampleStrings[i]));
-        }
-
-        logger.info("passed examples.add");
+        List<ExampleDto> examples = registerExample(definitionId, exampleStrings, conn);
 
         taggingDao.addTagging(definitionId,tagIds,conn);
         CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
         collectionDao.addDefinition(collectionPayload,conn);
-
-        logger.info("passed taggingDao.addTagging");
 
         conn.commit();
 
@@ -134,6 +120,70 @@ public class DefinitionServiceImpl implements DefinitionService{
                 throw new SQLException("Failed to rollback transaction: " + e.getMessage());
             }
         }
+    }
+    private BaseEntityDto retrieveOrCreateWord(String wordString, Connection conn) throws SQLException{
+        int wordId = wordDao.retrieveOrCreate(wordString, conn);
+        BaseEntityDto wordDto = new BaseEntityDto(wordId, wordString);
+        return wordDto;
+    }
+    private BaseEntityDto retrieveOrCreatePhonetic(String phoneticString,Connection conn)throws SQLException{
+        int phoneticId = phoneticDao.retrieveOrCreate(phoneticString, conn);
+        BaseEntityDto phoneticDto = new BaseEntityDto(phoneticId, phoneticString);
+        return phoneticDto;
+    }
+    private MeaningDto registerMeaning(int definitionId, String meaningString, Connection conn) throws SQLException{
+        int meaningId = meaningDao.registerMeaning(definitionId, meaningString, conn);
+        MeaningDto meaningDto = new MeaningDto(meaningId, meaningString);
+        return meaningDto;
+    }
+    private List<ExampleDto> registerExample(int definitionId, String[] exampleStrings, Connection conn) throws SQLException{
+        int[] exampleIds = exampleDao.registerExample(definitionId, exampleStrings, conn);
+        List<ExampleDto> examples = new ArrayList<>();
+        for(int i=0;i<exampleStrings.length;i++){
+            examples.add(new ExampleDto(exampleIds[i],exampleStrings[i]));
+        }
+        return examples;
+    }
+
+    @Override
+    public DefinitionDtoWithEntryInfo updateDefinition(EntryUpdatePayload payload) throws SQLException{
+        Connection conn = connectionPool.getConnection();
+        DefinitionDtoWithEntryInfo dto = new DefinitionDtoWithEntryInfo();
+        try{
+            conn.setAutoCommit(false);
+            int definitionId = payload.getEntryId();
+            int userId = payload.getUserId();
+            BaseEntityDto wordDto = retrieveOrCreateWord(payload.getWordString(), conn);
+            BaseEntityDto phoneticDto = retrieveOrCreatePhonetic(payload.getPhoneticString(), conn);
+            String[] tagStrings = payload.getTagStrings();
+            int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
+            List<TagDto> tags = new ArrayList<>();
+            for(int i=0;i<tagStrings.length;i++){
+                tags.add(new TagDto(tagIds[i],tagStrings[i]));
+            }
+
+            meaningDao.deleteMeaning(definitionId, conn);
+            exampleDao.deleteExample(definitionId, conn);
+            taggingDao.deleteTagging(definitionId, conn);
+            MeaningDto meaningDto = registerMeaning(definitionId, payload.getMeaningString(), conn);
+            List<ExampleDto> examples = registerExample(definitionId, payload.getExampleStrings(), conn);
+            taggingDao.addTagging(definitionId,tagIds,conn);
+            CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
+            collectionDao.addDefinition(collectionPayload,conn);
+
+            dto.setId(definitionId);
+            dto.setAuthorId(userId);
+            dto.setWord(wordDto);
+            dto.setPhonetic(phoneticDto);
+            dto.setMeaning(meaningDto);
+            dto.setExamples(examples);
+            dto.setTags(tags);
+
+            conn.commit();
+        }catch(SQLException e){
+            rollbackTransaction(conn);
+        }
+        return dto;
     }
 /* 
     public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){

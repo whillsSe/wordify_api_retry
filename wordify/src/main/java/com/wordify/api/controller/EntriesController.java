@@ -34,7 +34,7 @@ public class EntriesController extends AbstractController{
             EntrySearchPayload query = ControllerUtils.getEntryQuery(req);
             query.setWordString(req.getParameter("word"));
             query.setPhoneticString(req.getParameter("phonetic"));
-            String tags = req.getParameter("tag");
+            String tags = req.getParameter("tags");
             if(tags != null){
                 query.setTagsStrings(Arrays.asList(tags.split(",")));
             }

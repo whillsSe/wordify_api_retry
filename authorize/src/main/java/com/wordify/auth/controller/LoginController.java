@@ -51,6 +51,7 @@ public class LoginController extends AbstractController{
             //authCookie.setSecure(true); // HTTPSを使用する場合、Secure属性を設定する
             authCookie.setDomain("localhost");
             authCookie.setPath("/"); // 必要に応じてパスを指定する
+            authCookie.setMaxAge(86400000 / 1000); // 有効期限は24時間
             res.addCookie(authCookie);
 
             InitializeInfo initializeInfo = profileService.getInitializeInfo(userId);

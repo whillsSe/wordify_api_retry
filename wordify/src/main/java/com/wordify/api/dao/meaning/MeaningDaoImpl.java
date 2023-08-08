@@ -52,6 +52,15 @@ public class MeaningDaoImpl implements MeaningDao{
           }else{
             throw new SQLException("Creating meaning failed, no ID obtained.");
           }
+        }
       }
     }
-}}
+    @Override
+    public void deleteMeaning(int definitionId,Connection conn) throws SQLException{
+      String sql = "DELETE FROM meaning WHERE definition_id = ?";
+      try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+        pstmt.setInt(1,definitionId);
+        pstmt.executeUpdate();
+      }
+    }
+}

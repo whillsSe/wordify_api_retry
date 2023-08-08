@@ -1,6 +1,7 @@
 package com.wordify.api.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
@@ -34,6 +35,18 @@ public class DefinitionController extends AbstractController{
         };
         handleAsyncRequest(task, res);
     }
+    public void handlePutRequest(HttpServletRequest req,HttpServletResponse res)throws IOException{
+        Callable<String> task = () -> {
+            String requestBody = ControllerUtils.readRequestBody(req);
+            ObjectMapper mapper = ObjectMapperSingleton.getInstance();
+            DefinitionDtoWithEntryInfo requestedValue = mapper.readValue(requestBody,DefinitionDtoWithEntryInfo.class);
+            requestedValue.setAuthorId((Integer)req.getAttribute("user"));
+            DefinitionDto dto = service.updateDefinition(requestedValue);
+            String json = mapper.writeValueAsString(dto);
+            return json;
+        };
+        };
+    }
 /* 
     public void handlePutRequest(HttpServletRequest req,HttpServletResponse res) throws IOException{
         Callable<String> task = () -> {
@@ -48,4 +61,3 @@ public class DefinitionController extends AbstractController{
        handleAsyncRequest(task, res);
     }
     */
-}

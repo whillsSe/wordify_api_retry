@@ -1,0 +1,34 @@
+PUT機能の動線を整理
+Servlet
+    /entries/edit
+Controller
+    リクエストボディにPUTする内容を書く？
+    ・BodyをReadして、JSONを取得
+    ・JSONをJavaオブジェクトに変換
+        構造：{
+            id:
+            word:
+            phonetic:
+            meaning:
+            example:[
+                {
+                    id:
+                    sentence:
+                }(,…)
+            ]
+            tag:[
+                string(,…)
+            ]
+        }
+
+        //タグは文字列列挙で送る
+            ⇒tagの列挙からidの列挙を取得(tagDao)
+            ⇒taggingのdefiniton_idから一旦taggingを削除
+            ⇒idの列挙をtaggingに登録
+
+        //exampleも同様
+        
+Service
+
+
+

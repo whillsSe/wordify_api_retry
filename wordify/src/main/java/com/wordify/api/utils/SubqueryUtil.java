@@ -63,7 +63,7 @@ public class SubqueryUtil {
         }
         if(!tagsStrings.isEmpty()){
             if(count != 0) builder.append(" AND ");
-            builder.append("d.id IN (SELECT definition_id FROM definitions_tags dt JOIN tags t ON dt.tag_id = t.id WHERE tag IN (");
+            builder.append("d.id IN (SELECT definition_id FROM tagging dt JOIN tags t ON dt.tag_id = t.id WHERE tag IN (");
             SQLUtils.prepareQueryForElements(tagsStrings.size(), builder);
             builder.append(")");
             builder.append(" GROUP BY dt.definition_id HAVING COUNT(DISTINCT t.tag) = ");
@@ -72,10 +72,10 @@ public class SubqueryUtil {
             for(String tag : tagsStrings){
                 params.add(new StringParam(tag));
             }
+            count++;
         }
-          if(count != 0) builder.append(" AND ");
-          builder.append("1=1");
-          params.add(new IntParam(query.getUserId()));
+        if(count != 0) builder.append(" AND ");
+          builder.append("1 = 1");
         return new SubqueryResult(builder.toString(),params); 
     }
 }

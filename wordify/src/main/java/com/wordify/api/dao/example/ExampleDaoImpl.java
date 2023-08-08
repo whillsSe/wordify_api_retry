@@ -67,5 +67,13 @@ public class ExampleDaoImpl implements ExampleDao{
         }
       return exampleIds;
     }
+  }
+  @Override
+  public void deleteExample(int definitionId,Connection conn) throws SQLException{
+    String sql = "DELETE FROM examples WHERE definition_id = ?";
+    try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+      pstmt.setInt(1, definitionId);
+      pstmt.executeUpdate();
     }
+  }
 }
