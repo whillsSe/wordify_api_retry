@@ -28,6 +28,7 @@ public class LoginServiceImpl implements LoginService{
         if(!hashedPass.equals(Sha256Hash.getSha256Hash(password))){
             throw new LoginException("Password unmatched!");//仮設
         };
+        connectionPool.releaseConnection(conn);
         return authorizeInfo.getId();
     }
 }

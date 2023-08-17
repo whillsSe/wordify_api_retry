@@ -17,6 +17,8 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public InitializeInfo getInitializeInfo(int userId) throws Exception{
         Connection conn = connectionPool.getConnection();
-        return profileDao.getInfo(userId, conn);
+        InitializeInfo initializeInfo = profileDao.getInfo(userId, conn);
+        connectionPool.releaseConnection(conn);
+        return initializeInfo;
     }
 }

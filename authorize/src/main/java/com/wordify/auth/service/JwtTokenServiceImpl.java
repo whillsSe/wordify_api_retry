@@ -71,6 +71,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
         long expirationMilliSec = now.getTime() + REFRESH_EXPIRATION_TIME;
         String refreshToken = Jwts.builder().setSubject(Integer.toString(userId)).setIssuedAt(now).setExpiration(new Date(expirationMilliSec)).signWith(SECRET_KEY,SignatureAlgorithm.HS256).compact();
         refreshTokenDao.registerRefreshToken(new RefreshTokenInfo(refreshToken, userId, expirationMilliSec), conn);
+        connectionPool.releaseConnection(conn);
         return refreshToken;
     }
     @Override
@@ -80,6 +81,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
             int userId = Integer.parseInt(parseClaimsToken(refreshToken));
             //さらに、DB上にこのtokenが存在しているかをチェック
             refreshTokenDao.checkRefreshToken(refreshToken,conn);//判定をdaoに任せてしまってるので、本当はよくない。
+            connectionPool.releaseConnection(conn);
             return userId;
         }catch(ExpiredJwtException e){
             throw new JwtException("The refresh token has expired.",e);
@@ -99,7 +101,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
             int userId = Integer.parseInt(parseClaimsToken(refreshToken));
             //さらに、DB上にこのtokenが存在しているかをチェック
             refreshTokenDao.checkRefreshToken(refreshToken,conn);//判定をdaoに任せてしまってるので、本当はよくない。
-                
+            connectionPool.releaseConnection(conn);    
             return createAccessToken(userId);
         }catch(ExpiredJwtException e){
             throw new JwtException("The refresh token has expired.",e);

@@ -44,6 +44,7 @@ public class DefinitionController extends AbstractController{
             String json = mapper.writeValueAsString(dto);
             return json;
         };
+        handleAsyncRequest(task, res);
         };
     }
 
