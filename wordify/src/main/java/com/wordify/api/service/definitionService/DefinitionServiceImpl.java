@@ -165,6 +165,7 @@ public class DefinitionServiceImpl implements DefinitionService{
             meaningDao.deleteMeaning(definitionId, conn);
             exampleDao.deleteExample(definitionId, conn);
             taggingDao.deleteTagging(definitionId, conn);
+            
             MeaningDto meaningDto = registerMeaning(definitionId, payload.getMeaningString(), conn);
             List<ExampleDto> examples = registerExample(definitionId, payload.getExampleStrings(), conn);
             taggingDao.addTagging(definitionId,tagIds,conn);

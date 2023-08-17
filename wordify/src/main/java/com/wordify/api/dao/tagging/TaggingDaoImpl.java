@@ -22,4 +22,14 @@ public class TaggingDaoImpl implements TaggingDao{
             throw new SQLException("Creating tagging failed, no ID obtained.");
         }
     }
+    @Override
+    public void deleteTagging(int definitionId, Connection conn) throws SQLException {
+        String sql = "DELETE FROM tagging WHERE definition_id = ?";
+        try(PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setInt(1,definitionId);
+            pstmt.executeUpdate();
+        }catch(SQLException e){
+            throw new SQLException("Deleting tagging failed, no ID obtained.");
+        }
+    }
 }
