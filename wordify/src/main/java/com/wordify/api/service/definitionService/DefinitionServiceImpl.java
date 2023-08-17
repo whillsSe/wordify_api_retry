@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
 import com.wordify.api.dao.collection.CollectionDaoImpl;
@@ -164,7 +163,7 @@ public class DefinitionServiceImpl implements DefinitionService{
 
             meaningDao.deleteMeaning(definitionId, conn);
             exampleDao.deleteExample(definitionId, conn);
-            taggingDao.deleteTagging(definitionId, conn);
+            //taggingDao.deleteTagging(definitionId, conn);
             MeaningDto meaningDto = registerMeaning(definitionId, payload.getMeaningString(), conn);
             List<ExampleDto> examples = registerExample(definitionId, payload.getExampleStrings(), conn);
             taggingDao.addTagging(definitionId,tagIds,conn);
@@ -185,16 +184,5 @@ public class DefinitionServiceImpl implements DefinitionService{
         }
         return dto;
     }
-/* 
-    public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){
-        //Dtoの中のidを読んで、idが未設定だったら新しく参照をとる、でいいような気もする。
-        //word
-        //phonetic
-        //tag
-        //meaning,exampleに関しては、送られてきた内容をそのまま更新かけるだけで良いはず。
-        //examplesとかに関してはもっと項目数減らしても良いかもしれないが。
-        //meaning
-        //examples
-    }
-*/
+
 }

@@ -32,6 +32,7 @@ c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\Dao
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\example\ExampleDaoImpl.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\meaning\MeaningDao.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\word\WordDao.java
+c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dto\payloads\EntryUpdatePayload.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\servlet\EntriesServlet.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\entry\EntryDao.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\config\JwtAuthenticationFilter.java

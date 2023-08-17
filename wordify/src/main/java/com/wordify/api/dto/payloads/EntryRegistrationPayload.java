@@ -41,8 +41,8 @@ public class EntryRegistrationPayload {
     public String getMeaningString() {
         return meaningString;
     }
-    public void setMeaningString(String meaningString) {
-        this.meaningString = meaningString;
+    public void setMeaningString(String strings) {
+        this.meaningString = strings;
     }
     public String[] getExampleStrings() {
         return exampleString;
