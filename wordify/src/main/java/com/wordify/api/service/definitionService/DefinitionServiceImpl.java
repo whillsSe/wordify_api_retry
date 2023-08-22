@@ -69,15 +69,17 @@ public class DefinitionServiceImpl implements DefinitionService{
         String wordString = payload.getWordString();
         BaseEntityDto wordDto = retrieveOrCreateWord(wordString, conn);
             //メモ：取得との統一感としても、引数Objで渡す⇒欲しいdtoで返す方が統一感があった気がする。
-            
         String phoneticString = payload.getPhoneticString();
         BaseEntityDto phoneticDto = retrieveOrCreatePhonetic(phoneticString, conn);
 
         String[] tagStrings = payload.getTagStrings();
-        int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
+        int tagIds[] = new int[tagStrings.length];
         List<TagDto> tags = new ArrayList<>();
-        for(int i=0;i<tagStrings.length;i++){
-            tags.add(new TagDto(tagIds[i],tagStrings[i]));
+        if(tagStrings.length != 0){
+            tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
+            for(int i=0;i<tagStrings.length;i++){
+                tags.add(new TagDto(tagIds[i],tagStrings[i]));
+            }
         }
 
         int userId = payload.getUserId();
@@ -87,9 +89,14 @@ public class DefinitionServiceImpl implements DefinitionService{
         MeaningDto meaningDto = registerMeaning(definitionId, meaningString, conn);
 
         String[] exampleStrings = payload.getExampleStrings();
-        List<ExampleDto> examples = registerExample(definitionId, exampleStrings, conn);
-
-        taggingDao.addTagging(definitionId,tagIds,conn);
+        List<ExampleDto> examples = new ArrayList<>();
+        if(exampleStrings.length != 0){
+            examples = registerExample(definitionId, exampleStrings, conn);
+        }
+        
+        if(tagStrings.length != 0){
+            taggingDao.addTagging(definitionId,tagIds,conn);
+        }
         CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
         collectionDao.addDefinition(collectionPayload,conn);
 
@@ -100,12 +107,17 @@ public class DefinitionServiceImpl implements DefinitionService{
         dto.setWord(wordDto);
         dto.setPhonetic(phoneticDto);
         dto.setMeaning(meaningDto);
-        dto.setExamples(examples);
-        dto.setTags(tags);
+        if(exampleStrings.length != 0) dto.setExamples(examples);
+        if(tagIds.length != 0) dto.setTags(tags);
 
     }catch(SQLException e){
-        logger.info(e.getMessage() + e.getLocalizedMessage());
+        logger.info(e.getStackTrace()[0].getClassName() + e.getStackTrace()[0].getMethodName() + e.getStackTrace()[0].getLineNumber() +e.getMessage() + e.getLocalizedMessage());
         rollbackTransaction(conn);
+    }finally{
+        if(conn != null){
+            conn.setAutoCommit(true);
+            conn.close();
+        }
     }
         return dto;
     }
@@ -113,7 +125,7 @@ public class DefinitionServiceImpl implements DefinitionService{
         if (conn != null) {
             try {
                 conn.rollback();
-                throw new SQLException("Transaction rolled back");
+                return;
             } catch (SQLException e) {
                 Logger logger = Logger.getLogger(DefinitionServiceImpl.class.getName());
                 logger.info("Failed to rollback transaction: " + e.getMessage());
@@ -186,16 +198,4 @@ public class DefinitionServiceImpl implements DefinitionService{
         }
         return dto;
     }
-/* 
-    public DefinitionDtoWithEntryInfo updateDefinition(DefinitionDtoWithEntryInfo payload){
-        //Dtoの中のidを読んで、idが未設定だったら新しく参照をとる、でいいような気もする。
-        //word
-        //phonetic
-        //tag
-        //meaning,exampleに関しては、送られてきた内容をそのまま更新かけるだけで良いはず。
-        //examplesとかに関してはもっと項目数減らしても良いかもしれないが。
-        //meaning
-        //examples
-    }
-*/
 }

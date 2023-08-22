@@ -46,19 +46,24 @@ public class ExampleDaoImpl implements ExampleDao{
       }
       builder.deleteCharAt(builder.length() - 1);
       try(PreparedStatement pstmt = conn.prepareStatement(builder.toString(), Statement.RETURN_GENERATED_KEYS)){
-        for (int i=0;i<exampleStrings.length;i++) {
-            String exampleString = exampleStrings[i];
-            pstmt.setInt(i*2+1, definitionId);
-            pstmt.setString(i*2+2, exampleString);
+        Logger logger = Logger.getLogger(ExampleDaoImpl.class.getName());
+        logger.info(builder.toString());
+        for (int n=0;n<exampleStrings.length;n++) {
+            String exampleString = exampleStrings[n];
+            pstmt.setInt(n*2 + 1, definitionId);
+            pstmt.setString(n*2 + 2, exampleString);
+        }
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating examples failed, no rows affected.");
             }
     
             try(ResultSet generatedKeys = pstmt.getGeneratedKeys()){
+              int n = 0;
                 if(generatedKeys.next()){
                     int id = generatedKeys.getInt(1);
-                    exampleIds[i] = id;
+                    exampleIds[n] = id;
+                    n++;
                 } else {
                     throw new SQLException("Creating tag failed, no ID obtained.");
                 }
@@ -67,7 +72,6 @@ public class ExampleDaoImpl implements ExampleDao{
         }
       return exampleIds;
     }
-  }
   @Override
   public void deleteExample(int definitionId,Connection conn) throws SQLException{
     String sql = "DELETE FROM examples WHERE definition_id = ?";

@@ -24,7 +24,7 @@ public class EntryDaoImpl implements EntryDao{
     public List<EntryDto> getEntry(EntrySearchPayload query,Connection conn){
         SubqueryResult subqueryResult = SubqueryUtil.createSubquery(query);
         SubqueryResult whereClauseResult = SubqueryUtil.createEntryWhereClause(query);
-        StringBuilder builder = new StringBuilder("SELECT word,w.id AS wordId,phonetic,p.id AS phoneticId FROM definitions d JOIN (");
+        StringBuilder builder = new StringBuilder("SELECT DISTINCT word,w.id AS wordId,phonetic,p.id AS phoneticId FROM definitions d JOIN (");
         builder.append(subqueryResult.getQuery()).append(") AS scope ON d.id = scope.definition_id JOIN words w ON d.word_id = w.id JOIN phonetics p ON d.phonetic_id = p.id");
         builder.append(whereClauseResult.getQuery());
         Logger logger = Logger.getLogger(EntryDaoImpl.class.getName());
