@@ -18,9 +18,11 @@ public class CollectionServiceImpl implements CollectionService{
     public void addCollection(CollectionTargetPayload query)throws SQLException{
         Connection conn = connectionPool.getConnection();
         collectionDao.addDefinition(query,conn);//エラーはcontrollerまで直通
+        conn.close();
     }
     public void removeCollection(CollectionTargetPayload query)throws SQLException{
         Connection conn = connectionPool.getConnection();
         collectionDao.removeDefinition(query,conn);
+        conn.close();
     }
 }

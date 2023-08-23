@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
 import com.wordify.api.config.ConnectionPool;
 import com.wordify.api.dao.collection.CollectionDao;
 import com.wordify.api.dao.collection.CollectionDaoImpl;
@@ -30,6 +29,7 @@ import com.wordify.api.dto.ExampleDto;
 import com.wordify.api.dto.MeaningDto;
 import com.wordify.api.dto.TagDto;
 import com.wordify.api.dto.payloads.CollectionTargetPayload;
+import com.wordify.api.dto.payloads.EntryDeletePayload;
 import com.wordify.api.dto.payloads.EntryRegistrationPayload;
 import com.wordify.api.dto.payloads.EntryUpdatePayload;
 
@@ -167,35 +167,50 @@ public class DefinitionServiceImpl implements DefinitionService{
             int userId = payload.getUserId();
             BaseEntityDto wordDto = retrieveOrCreateWord(payload.getWordString(), conn);
             BaseEntityDto phoneticDto = retrieveOrCreatePhonetic(payload.getPhoneticString(), conn);
-            String[] tagStrings = payload.getTagStrings();
-            int[] tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
-            List<TagDto> tags = new ArrayList<>();
-            for(int i=0;i<tagStrings.length;i++){
-                tags.add(new TagDto(tagIds[i],tagStrings[i]));
-            }
+
+            definitionDao.updateDefinition(userId, definitionId, wordDto.getId(), phoneticDto.getId(), conn);
 
             meaningDao.deleteMeaning(definitionId, conn);
             exampleDao.deleteExample(definitionId, conn);
             taggingDao.deleteTagging(definitionId, conn);
+
+            String[] tagStrings = payload.getTagStrings();
+            int[] tagIds;
+            List<TagDto> tags = new ArrayList<>();
+            if(tagStrings.length != 0) {
+                tagIds = tagDao.retrieveOrCreate(tagStrings, conn);
+                for(int i=0;i<tagStrings.length;i++){
+                    tags.add(new TagDto(tagIds[i],tagStrings[i]));
+                }
+                taggingDao.addTagging(definitionId,tagIds,conn);
+                dto.setTags(tags);
+            }
             
             MeaningDto meaningDto = registerMeaning(definitionId, payload.getMeaningString(), conn);
-            List<ExampleDto> examples = registerExample(definitionId, payload.getExampleStrings(), conn);
-            taggingDao.addTagging(definitionId,tagIds,conn);
-            CollectionTargetPayload collectionPayload = new CollectionTargetPayload(userId,definitionId);
-            collectionDao.addDefinition(collectionPayload,conn);
+            if(payload.getExampleStrings().length != 0){
+                List<ExampleDto> examples = registerExample(definitionId, payload.getExampleStrings(), conn);
+                dto.setExamples(examples);
+            }
 
             dto.setId(definitionId);
             dto.setAuthorId(userId);
             dto.setWord(wordDto);
             dto.setPhonetic(phoneticDto);
             dto.setMeaning(meaningDto);
-            dto.setExamples(examples);
-            dto.setTags(tags);
 
             conn.commit();
         }catch(SQLException e){
+            e.printStackTrace();
             rollbackTransaction(conn);
         }
+        conn.close();
         return dto;
+    }
+    @Override
+    public void deleteDefinition(EntryDeletePayload payload)throws SQLException {
+        Connection conn = connectionPool.getConnection();
+        definitionDao.deleteDefinition(payload.getUserId(),payload.getId(),conn);
+        conn.close();
+        return;
     }
 }

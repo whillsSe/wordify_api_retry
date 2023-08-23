@@ -21,6 +21,27 @@ public class DefinitionDaoImpl implements DefinitionDao{
                 }else{
                     throw new SQLException("Creating definition failed, no ID obtained.");
                 }
+            }
         }
     }
-}}
+    @Override
+    public void updateDefinition(int userId,int definitionId,int wordId,int phoneticId,Connection conn) throws SQLException{
+        StringBuilder builder = new StringBuilder("UPDATE definitions SET word_id = ?,phonetic_id = ? WHERE id = ? AND author_id = ?;");
+        try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
+            pstmt.setInt(1, wordId);
+            pstmt.setInt(2, phoneticId);
+            pstmt.setInt(3,definitionId);
+            pstmt.setInt(4, userId);
+            pstmt.executeUpdate();
+        }
+    }
+    @Override 
+    public void deleteDefinition(int userId,int definitionId,Connection conn) throws SQLException{
+        StringBuilder builder = new StringBuilder("DELETE FROM definitions WHERE id = ? AND author_id = ?");
+        try(PreparedStatement pstmt = conn.prepareStatement(builder.toString())){
+            pstmt.setInt(1,definitionId);
+            pstmt.setInt(2, userId);
+            pstmt.executeUpdate();
+        }      
+    } 
+}

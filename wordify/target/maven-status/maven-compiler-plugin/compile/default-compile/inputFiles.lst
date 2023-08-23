@@ -5,6 +5,7 @@ c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\tag
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\IDtoAndKeyMapper.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dto\payloads\ContextRetrievalPayload.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\word\WordDaoImpl.java
+c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dto\payloads\EntryDeletePayload.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\example\ExampleDao.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\meaning\MeaningMapper.java
 c:\workspace\project\wordify_alpha\wordify\src\main\java\com\wordify\api\dao\tag\TagDao.java

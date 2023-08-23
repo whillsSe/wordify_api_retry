@@ -62,6 +62,9 @@ public class EntriesController extends AbstractController{
         };
         super.handleAsyncRequest(task, resp);
     }
+
+
+
     private ContextDtoViewModel convertContextDtoToViewModel(ContextDto dto){
         ContextDtoViewModel viewModel = new ContextDtoViewModel();
         viewModel.setDefinitions(dto.getDefinitionsList());

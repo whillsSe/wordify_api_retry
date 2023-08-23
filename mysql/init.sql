@@ -120,13 +120,13 @@ ALTER TABLE `definitions`
   ADD CONSTRAINT `definitions_ibfk_3` FOREIGN KEY (`author_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `examples`
-  ADD CONSTRAINT `examples_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`);
+  ADD CONSTRAINT `examples_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `meaning`
-  ADD CONSTRAINT `meaning_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`);
+  ADD CONSTRAINT `meaning_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `tagging`
-  ADD CONSTRAINT `tagging_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`),
+  ADD CONSTRAINT `tagging_ibfk_1` FOREIGN KEY (`definition_id`) REFERENCES `definitions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
   ADD CONSTRAINT `tagging_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`);
 
 ALTER TABLE `users`
