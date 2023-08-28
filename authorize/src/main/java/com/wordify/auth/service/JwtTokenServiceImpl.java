@@ -116,6 +116,7 @@ public class JwtTokenServiceImpl implements JwtTokenService{
     public void revokeRefreshToken(String refreshToken) throws SQLException {
         Connection conn = connectionPool.getConnection();
         refreshTokenDao.revokeRefreshToken(refreshToken, conn);
+        conn.close();
     }
 
     @Override

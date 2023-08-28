@@ -16,11 +16,13 @@ c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\serv
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\controllerUtils\ControllerUtils.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dao\LoginDao.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\ProfileService.java
+c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\LogoutController.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dto\RefreshTokenInfo.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\LoginService.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\controller\InitializeController.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\servlet\LoginServlet.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\service\ProfileServiceImpl.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dto\AuthorizePrameter.java
+c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\servlet\LogoutServlet.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\dao\ProfileDao.java
 c:\workspace\project\wordify_alpha\authorize\src\main\java\com\wordify\auth\utils\ObjectMapperSingleton.java
